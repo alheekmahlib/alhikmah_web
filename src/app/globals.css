@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Design System v2 — مكتبة الحكمة
+   لوحة الألوان: أخضر زمردي غني + ورقي دافئ
+   الهوية الجديدة (بديل الذهبي بالكامل)
+   ========================================================================== */
+
+@theme {
+  /* ===== الخطوط ===== */
+  --font-sans: var(--font-zain), "Zain", system-ui, sans-serif;
+  --font-display: var(--font-zain), "Zain", serif;
+  --font-kufi: var(--font-zain), "Zain", sans-serif;
+  /* خط النسخ للكتب والآيات */
+  --font-naskh: var(--font-naskh), "Noto Naskh Arabic", serif;
+  --font-quran: var(--font-naskh), "Noto Naskh Arabic", serif;
+
+  /* ===== الأخضر الزمردي (الأساسي) ===== */
+  --color-emerald: #2d6a4f;
+  --color-emerald-deep: #1b4332;
+  --color-emerald-bright: #52b788;
+  --color-emerald-light: #b7e4c7;
+  --color-emerald-glow: #74c69d;
+
+  /* ===== أرضية ورقية دافئة ===== */
+  --color-bg: #fbf7ee;
+  --color-bg-warm: #f2ebd7;
+  --color-paper: #fffef8;
+  --color-paper-2: #f8f2e2;
+
+  /* ===== نصوص بنية ===== */
+  --color-ink: #2a1f12;
+  --color-ink-2: #3d2817;
+  --color-ink-soft: #6b5a42;
+  --color-ink-faint: #a89770;
+
+  /* ===== بني (داعم) ===== */
+  --color-brown: #8b6f47;
+  --color-brown-deep: #5c4a2e;
+
+  /* ===== حدود ===== */
+  --color-rule: #d9d4c3;
+  --color-rule-soft: #e8e2d2;
+  --color-emerald-rule: #c3d9cd;
+
+  /* ===== ظلال ===== */
+  --shadow-sm: 0 1px 2px rgba(27, 67, 50, 0.04), 0 4px 12px rgba(27, 67, 50, 0.04);
+  --shadow-md: 0 2px 8px rgba(27, 67, 50, 0.06), 0 16px 40px rgba(27, 67, 50, 0.08);
+  --shadow-lg: 0 8px 24px rgba(27, 67, 50, 0.1), 0 30px 70px rgba(27, 67, 50, 0.12);
+  --shadow-emerald: 0 8px 28px rgba(45, 106, 79, 0.25);
+
+  /* ===== حركات ===== */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-emerald: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ==========================================================================
+   الوضع الداكن
+   ========================================================================== */
+.dark {
+  --color-emerald: #52b788;
+  --color-emerald-deep: #1b4332;
+  --color-emerald-bright: #74c69d;
+  --color-emerald-light: #2d6a4f;
+  --color-emerald-glow: #95d5b2;
+
+  --color-bg: #0f1814;
+  --color-bg-warm: #0a120e;
+  --color-paper: #18241d;
+  --color-paper-2: #1f2f25;
+
+  --color-ink: #f5ebd6;
+  --color-ink-2: #e8d49c;
+  --color-ink-soft: #a8b5a8;
+  --color-ink-faint: #6b7b6e;
+
+  --color-brown: #8b6f47;
+  --color-brown-deep: #5c4a2e;
+
+  --color-rule: #2d3d33;
+  --color-rule-soft: #1f2f25;
+  --color-emerald-rule: #2d4a3d;
+}
+
+/* ==========================================================================
+   أساسيات
+   ========================================================================== */
+@layer base {
+  * {
+    border-color: var(--color-rule);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.7;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  body.has-custom-cursor {
+    cursor: none;
+  }
+  body.has-custom-cursor a,
+  body.has-custom-cursor button,
+  body.has-custom-cursor [role="button"] {
+    cursor: none;
+  }
+
+  ::selection {
+    background-color: var(--color-emerald);
+    color: var(--color-paper);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-emerald-rule);
+    border-radius: 5px;
+    border: 2px solid var(--color-bg);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-emerald);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* ==========================================================================
+   مكوّنات منفّعة
+   ========================================================================== */
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-emerald);
+  }
+
+  .text-emerald-accent {
+    color: var(--color-emerald);
+    font-weight: 700;
+  }
+
+  .book-content {
+    font-family: var(--font-naskh);
+    line-height: 2.1;
+    font-size: 1.1rem;
+  }
+  .book-content p {
+    margin-bottom: 1.2em;
+    text-align: justify;
+  }
+  .book-content h1,
+  .book-content h2,
+  .book-content h3,
+  .book-content h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    margin: 1.5em 0 0.8em;
+  }
+  .book-content h3 {
+    font-size: 1.4em;
+    color: var(--color-emerald-deep);
+  }
+  .book-content a {
+    color: var(--color-emerald);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .book-content blockquote {
+    border-inline-start: 3px solid var(--color-emerald);
+    padding-inline-start: 1em;
+    margin: 1em 0;
+    color: var(--color-ink-soft);
+    font-style: italic;
+  }
+}
+
+/* ==========================================================================
+   أنميشن + احترام تقليل الحركة
+   ========================================================================== */
+@layer utilities {
+  .lenis,
+  .lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .hover-lift {
+    transition: transform 0.3s var(--ease-emerald), box-shadow 0.3s var(--ease-emerald);
+  }
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
