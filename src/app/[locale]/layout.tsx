@@ -23,7 +23,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isAr = locale === "ar";
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://alheekmahlib.com";
+  const rawUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://alheekmahlib.com";
+  // تأكد من وجود البروتوكول
+  const baseUrl = rawUrl.startsWith("http") ? rawUrl : `https://${rawUrl}`;
   const title = isAr ? "مكتبة الحكمة" : "Alheekmah Library";
   const description = isAr
     ? "منصة إسلامية شاملة للقرآن الكريم ومرتليه، والأذكار، والعلم النافع."
