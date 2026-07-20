@@ -82,7 +82,7 @@ export function ContactPageContent() {
                 </a>
               </div>
 
-              <div className="rounded-2xl bg-gradient-to-br from-emerald-deep to-emerald p-6 text-center text-emerald-soft">
+              <div className="rounded-2xl bg-gradient-to-br from-emerald-deep to-emerald p-6 text-center text-emerald-soft-fixed">
                 <div className="font-quran text-4xl">۞</div>
                 <p className="mt-2 font-quran text-lg italic">
                   {t("contact_quote")}

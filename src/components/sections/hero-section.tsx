@@ -140,14 +140,14 @@ export function HeroSection() {
                   transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
                   className="mx-auto mb-5"
                 >
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="mx-auto h-10 w-10 text-emerald-light">
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="mx-auto h-10 w-10 text-emerald-light-fixed">
                     <path d="M12 2L14.39 8.26L21 9.27L16 14.14L17.18 21L12 17.77L6.82 21L8 14.14L3 9.27L9.61 8.26L12 2Z" />
                   </svg>
                 </motion.div>
-                <p className="font-naskh text-2xl font-bold leading-loose text-emerald-light">
+                <p className="font-naskh text-2xl font-bold leading-loose text-emerald-light-fixed">
                   {t("hero_ayah_text")}
                 </p>
-                <p className="mt-4 text-xs uppercase tracking-[0.2em] text-emerald-light/70">
+                <p className="mt-4 text-xs uppercase tracking-[0.2em] text-emerald-light-fixed/70">
                   {t("hero_ayah_ref")}
                 </p>
               </div>

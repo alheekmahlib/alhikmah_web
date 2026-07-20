@@ -61,7 +61,7 @@ export function BookCover({
       {/* اسم الكتاب في المنتصف */}
       <p
         className={cn(
-          "relative z-10 px-1 text-center font-display font-bold leading-tight text-emerald-light",
+          "relative z-10 px-1 text-center font-display font-bold leading-tight text-emerald-light-fixed",
           dimensions.text,
         )}
       >

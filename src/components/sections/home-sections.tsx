@@ -85,7 +85,7 @@ export function AyahMarqueeSection() {
   const text = t("ayah_band_text");
 
   return (
-    <section className="relative overflow-hidden border-y border-emerald/15 bg-emerald-deep py-5 text-emerald-light">
+    <section className="relative overflow-hidden border-y border-emerald/15 bg-emerald-deep py-5 text-emerald-light-fixed">
       <div className="flex gap-12 overflow-hidden">
         <motion.div
           className="flex shrink-0 items-center gap-12"
@@ -199,7 +199,7 @@ export function AppsCarouselSection() {
                   <motion.svg
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="relative z-10 h-20 w-20 text-emerald-light"
+                    className="relative z-10 h-20 w-20 text-emerald-light-fixed"
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   >

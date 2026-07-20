@@ -9,7 +9,7 @@ export function SiteFooter() {
   const t = useTranslations();
 
   return (
-    <footer className="relative mt-20 overflow-hidden bg-emerald-deep text-bg">
+    <footer className="relative mt-20 overflow-hidden bg-emerald-deep text-paper-fixed">
       {/* زخرفة هندسية */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.07]"
@@ -25,8 +25,8 @@ export function SiteFooter() {
           <div className="grid grid-cols-2 gap-10 border-b border-emerald-light/15 pb-12 md:grid-cols-3 lg:grid-cols-5">
             {/* الشعار */}
             <div className="col-span-2 lg:col-span-2">
-              <Logo height={40} className="mb-4 text-emerald-light" />
-              <p className="max-w-xs text-[0.92rem] leading-relaxed text-bg/70">
+              <Logo height={40} className="mb-4 text-emerald-light-fixed" />
+              <p className="max-w-xs text-[0.92rem] leading-relaxed text-paper-fixed/70">
                 {t("footer_desc")}
               </p>
               <div className="mt-5 flex gap-2.5">
@@ -35,7 +35,7 @@ export function SiteFooter() {
                     key={s}
                     href="#"
                     aria-label={s}
-                    className="grid h-9 w-9 place-items-center rounded-full border border-emerald-light/20 text-bg/70 transition-all hover:border-emerald-light hover:bg-emerald-light hover:text-emerald-deep"
+                    className="grid h-9 w-9 place-items-center rounded-full border border-emerald-light/20 text-paper-fixed/70 transition-all hover:border-emerald-light hover:bg-emerald-light hover:text-emerald-deep"
                   >
                     <SocialIcon name={s} />
                   </a>
@@ -65,7 +65,7 @@ export function SiteFooter() {
         </MotionReveal>
 
         <MotionReveal variant="fade-up" delay={0.1}>
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-6 text-[0.84rem] text-bg/55">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-6 text-[0.84rem] text-paper-fixed/55">
             <span>© {new Date().getFullYear()} · {t("appName")}</span>
             <span>{t("footer_made_with")}</span>
           </div>
@@ -78,13 +78,13 @@ export function SiteFooter() {
 function FooterColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <div>
-      <h5 className="mb-4 font-display text-lg font-bold text-emerald-light">{title}</h5>
+      <h5 className="mb-4 font-display text-lg font-bold text-emerald-light-fixed">{title}</h5>
       <ul className="space-y-1.5">
         {links.map((link) => (
           <li key={link.href + link.label}>
             <Link
               href={link.href}
-              className="text-[0.9rem] text-bg/70 transition-colors hover:text-emerald-light"
+              className="text-[0.9rem] text-paper-fixed/70 transition-colors hover:text-emerald-light-fixed"
             >
               {link.label}
             </Link>

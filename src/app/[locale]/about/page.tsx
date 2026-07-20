@@ -87,7 +87,7 @@ export default async function AboutPage({
             return (
               <Reveal key={value.titleKey} variant="up" delay={i * 90}>
                 <div className="rounded-2xl border border-rule bg-paper p-6 text-center transition-colors hover:border-emerald-soft">
-                  <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-emerald-deep to-emerald text-emerald-soft">
+                  <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-emerald-deep to-emerald text-emerald-soft-fixed">
                     <Icon className="h-7 w-7" strokeWidth={1.6} />
                   </div>
                   <h3 className="mb-2 font-display text-lg font-bold text-ink">
@@ -117,10 +117,10 @@ export default async function AboutPage({
             />
             <div className="relative z-10 mx-auto max-w-2xl">
               <span className="font-quran text-5xl text-emerald">۞</span>
-              <h2 className="mt-4 font-display text-3xl font-bold text-emerald-soft">
+              <h2 className="mt-4 font-display text-3xl font-bold text-emerald-soft-fixed">
                 {t("about_vision_title")}
               </h2>
-              <p className="mt-5 text-lg leading-loose text-emerald-soft/90">
+              <p className="mt-5 text-lg leading-loose text-emerald-soft-fixed/90">
                 {t("about_vision_text")}
               </p>
             </div>

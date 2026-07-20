@@ -71,10 +71,10 @@ export default function NotFound() {
         transition={{ delay: 0.6, duration: 0.8 }}
         className="mt-12 max-w-lg rounded-2xl bg-gradient-to-br from-emerald-deep to-emerald p-6 text-center"
       >
-        <p className="font-naskh text-lg italic leading-relaxed text-emerald-light">
+        <p className="font-naskh text-lg italic leading-relaxed text-emerald-light-fixed">
           {t("not_found_ayah")}
         </p>
-        <p className="mt-2 text-xs uppercase tracking-wider text-emerald-light/70">
+        <p className="mt-2 text-xs uppercase tracking-wider text-emerald-light-fixed/70">
           {t("not_found_ayah_ref")}
         </p>
       </motion.div>

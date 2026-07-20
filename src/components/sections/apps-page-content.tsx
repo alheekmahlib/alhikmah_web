@@ -74,7 +74,7 @@ export function AppsPageContent() {
                       />
                     ) : (
                       <div className="grid h-full place-items-center bg-gradient-to-br from-emerald-deep to-emerald">
-                        <span className="font-display text-3xl text-emerald-soft">
+                        <span className="font-display text-3xl text-emerald-soft-fixed">
                           {app.appTitle?.[0]}
                         </span>
                       </div>
