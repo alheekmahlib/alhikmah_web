@@ -156,7 +156,7 @@ function ItemCard({
     >
       {/* رأس البطاقة: أيقونة + عنوان */}
       <div className="mb-4 flex items-start gap-3">
-        <div className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl bg-emerald/10 text-emerald transition-colors group-hover:bg-emerald group-hover:text-paper">
+        <div className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl bg-emerald/10 text-emerald transition-colors group-hover:bg-emerald group-hover:text-paper-fixed">
           {isLibraries ? (
             <Code2 className="h-5 w-5" strokeWidth={1.7} />
           ) : (
@@ -334,7 +334,7 @@ function BigButton({
       className={cn(
         "inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[0.88rem] font-bold transition-all hover:-translate-y-0.5",
         primary
-          ? "bg-emerald text-paper shadow-emerald"
+          ? "bg-emerald text-paper-fixed shadow-emerald"
           : "border border-rule bg-paper text-ink-2 hover:border-emerald hover:text-emerald",
       )}
     >

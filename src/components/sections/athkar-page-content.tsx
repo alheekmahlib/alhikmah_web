@@ -81,7 +81,7 @@ export function AthkarPageContent() {
                     className={cn(
                       "flex-shrink-0 rounded-lg px-3 py-2 text-start text-[0.84rem] font-semibold transition-all",
                       activeCat === cat
-                        ? "bg-gradient-to-l from-emerald to-emerald-bright font-bold text-paper shadow-sm rtl:bg-gradient-to-r"
+                        ? "bg-gradient-to-l from-emerald to-emerald-bright font-bold text-paper-fixed shadow-sm rtl:bg-gradient-to-r"
                         : "bg-bg text-ink hover:bg-paper-2 hover:text-emerald-deep",
                     )}
                   >
@@ -179,7 +179,7 @@ function AthkarCard({
             className={cn(
               "relative grid h-10 w-10 place-items-center rounded-full text-sm font-bold transition-all",
               count >= target
-                ? "bg-emerald text-paper"
+                ? "bg-emerald text-paper-fixed"
                 : count > 0
                   ? "bg-emerald/30 text-emerald-deep hover:bg-emerald/40"
                   : "bg-paper text-emerald hover:bg-emerald/15",

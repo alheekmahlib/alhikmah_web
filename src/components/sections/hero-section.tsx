@@ -95,7 +95,7 @@ export function HeroSection() {
               <MagneticButton
                 href="/quran"
                 strength={0.25}
-                className="overflow-hidden rounded-xl bg-emerald px-7 py-3.5 font-bold text-paper shadow-emerald transition-colors hover:bg-emerald"
+                className="overflow-hidden rounded-xl bg-emerald px-7 py-3.5 font-bold text-paper-fixed shadow-emerald transition-colors hover:bg-emerald"
               >
                 <span className="flex items-center gap-2.5">
                   {t("cta_start_reading")}

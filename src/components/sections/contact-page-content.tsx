@@ -174,7 +174,7 @@ export function ContactPageContent() {
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="mt-2 inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-emerald to-emerald-bright px-6 py-3.5 font-bold text-paper shadow-lg shadow-emerald/30 transition-all hover:-translate-y-0.5 disabled:opacity-60"
+                  className="mt-2 inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-emerald to-emerald-bright px-6 py-3.5 font-bold text-paper-fixed shadow-lg shadow-emerald/30 transition-all hover:-translate-y-0.5 disabled:opacity-60"
                 >
                   {status === "loading" ? (
                     <>

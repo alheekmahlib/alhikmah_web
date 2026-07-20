@@ -209,7 +209,7 @@ function StoreButton({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-deep px-4 py-2.5 text-[0.86rem] font-bold text-paper transition-colors hover:bg-emerald"
+      className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-deep px-4 py-2.5 text-[0.86rem] font-bold text-paper-fixed transition-colors hover:bg-emerald"
     >
       <ExternalLink className="h-3.5 w-3.5" />
       {label}

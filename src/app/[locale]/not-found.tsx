@@ -50,7 +50,7 @@ export default function NotFound() {
       >
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald px-6 py-3 font-bold text-paper shadow-emerald transition-transform hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 rounded-xl bg-emerald px-6 py-3 font-bold text-paper-fixed shadow-emerald transition-transform hover:-translate-y-0.5"
         >
           <Home className="h-4 w-4" />
           {t("not_found_home")}

@@ -40,7 +40,7 @@ export default async function FaqPage({
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-base font-bold text-ink">
                   {t(`${k}_q`)}
-                  <span className="grid h-7 w-7 flex-shrink-0 place-items-center rounded-full bg-paper-2 text-emerald-deep transition-all duration-300 group-open:rotate-45 group-open:bg-emerald group-open:text-paper">
+                  <span className="grid h-7 w-7 flex-shrink-0 place-items-center rounded-full bg-paper-2 text-emerald-deep transition-all duration-300 group-open:rotate-45 group-open:bg-emerald group-open:text-paper-fixed">
                     <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />
                   </span>
                 </summary>

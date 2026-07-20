@@ -218,7 +218,7 @@ export function BookReaderClient({
         <p className="mb-6 text-ink-soft">{t("book_unavailable_desc")}</p>
         <Link
           href="/books"
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-2.5 font-bold text-paper"
+          className="inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-2.5 font-bold text-paper-fixed"
         >
           {t("book_back_to_library")}
         </Link>
@@ -348,7 +348,7 @@ export function BookReaderClient({
             <p className="text-[0.9rem]">{t("book_error")}</p>
             <button
               onClick={() => fetchPage(pageNum)}
-              className="mt-2 rounded-lg bg-emerald px-4 py-2 text-[0.82rem] font-bold text-paper"
+              className="mt-2 rounded-lg bg-emerald px-4 py-2 text-[0.82rem] font-bold text-paper-fixed"
             >
               {t("book_retry")}
             </button>
@@ -367,7 +367,7 @@ export function BookReaderClient({
         <button
           onClick={() => fetchPage(pageNum - 1)}
           disabled={pageNum <= 1 || pageLoading}
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald-deep px-5 py-2.5 text-[0.86rem] font-bold text-paper transition-colors hover:bg-emerald disabled:opacity-40"
+          className="inline-flex items-center gap-2 rounded-xl bg-emerald-deep px-5 py-2.5 text-[0.86rem] font-bold text-paper-fixed transition-colors hover:bg-emerald disabled:opacity-40"
         >
           <ChevronRight className="h-4 w-4" />
           {t("book_prev")}
@@ -375,7 +375,7 @@ export function BookReaderClient({
         <button
           onClick={() => fetchPage(pageNum + 1)}
           disabled={pageNum >= totalPages || pageLoading}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald to-emerald-bright px-5 py-2.5 text-[0.86rem] font-bold text-paper transition-transform hover:-translate-y-0.5 disabled:opacity-40"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald to-emerald-bright px-5 py-2.5 text-[0.86rem] font-bold text-paper-fixed transition-transform hover:-translate-y-0.5 disabled:opacity-40"
         >
           {t("book_next")}
           <ChevronLeft className="h-4 w-4" />

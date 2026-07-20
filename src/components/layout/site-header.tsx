@@ -95,7 +95,7 @@ export function SiteHeader() {
           <Link
             href="/contact-us"
             data-cursor="hover"
-            className="hidden rounded-xl bg-emerald px-4 py-2 text-[0.84rem] font-bold text-paper transition-all hover:bg-emerald md:inline-block"
+            className="hidden rounded-xl bg-emerald px-4 py-2 text-[0.84rem] font-bold text-paper-fixed transition-all hover:bg-emerald md:inline-block"
           >
             {t("contact_title")}
           </Link>
@@ -143,7 +143,7 @@ export function SiteHeader() {
               <Link
                 href="/contact-us"
                 onClick={() => setMobileOpen(false)}
-                className="mt-1 rounded-lg bg-emerald px-4 py-2.5 text-center font-bold text-paper"
+                className="mt-1 rounded-lg bg-emerald px-4 py-2.5 text-center font-bold text-paper-fixed"
               >
                 {t("contact_title")}
               </Link>

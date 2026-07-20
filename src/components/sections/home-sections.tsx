@@ -55,7 +55,7 @@ export function ServicesSection() {
                 href={service.href}
                 className="group relative block h-full overflow-hidden rounded-2xl border border-rule bg-paper p-7 transition-all duration-400 hover:-translate-y-1.5 hover:border-emerald hover:shadow-lg"
               >
-                <div className="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-emerald/8 text-emerald transition-all duration-300 group-hover:bg-emerald group-hover:text-paper">
+                <div className="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-emerald/8 text-emerald transition-all duration-300 group-hover:bg-emerald group-hover:text-paper-fixed">
                   <Icon className="h-7 w-7" strokeWidth={1.7} />
                 </div>
                 <h3 className="mb-2.5 font-display text-[1.35rem] font-bold text-ink">
@@ -225,7 +225,7 @@ export function AppsCarouselSection() {
                 <div className="flex items-center gap-3">
                   <Link
                     href="/apps"
-                    className="inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-2.5 text-[0.86rem] font-bold text-paper transition-transform hover:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-2.5 text-[0.86rem] font-bold text-paper-fixed transition-transform hover:-translate-y-0.5"
                   >
                     {t("apps_view_details")}
                     <ArrowLeft className="h-3.5 w-3.5 rtl:rotate-180" />

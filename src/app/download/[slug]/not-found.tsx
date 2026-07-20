@@ -20,7 +20,7 @@ export default function DownloadNotFound() {
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link
           href="/ar/apps"
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald px-6 py-3 font-bold text-paper shadow-emerald transition-transform hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 rounded-xl bg-emerald px-6 py-3 font-bold text-paper-fixed shadow-emerald transition-transform hover:-translate-y-0.5"
         >
           <Smartphone className="h-4 w-4" />
           تصفّح التطبيقات
