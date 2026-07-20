@@ -4,13 +4,14 @@ import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "motion/react";
 import { BookOpen, Headphones, Library, Heart, ArrowLeft, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
   MotionReveal,
   MotionStagger,
   MotionStaggerItem,
 } from "@/components/animation/motion-primitives";
-import type { LucideIcon, AppInfo } from "@/lib/types";
+import type { AppInfo } from "@/lib/types";
 
 /* ==========================================================================
    قسم الخدمات
