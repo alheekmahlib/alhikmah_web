@@ -105,10 +105,16 @@ export function AyahMarqueeSection() {
 }
 
 /* ==========================================================================
-   قسم تطبيقاتنا — Carousel Slider (بيانات حقيقية من GitHub)
+   قسم تطبيقاتنا — Carousel Slider (بيانات حقيقية من vexaltech API)
    ========================================================================== */
-const APPS_URL =
-  "https://raw.githubusercontent.com/alheekmahlib/thegarlanded/master/ourApps.json";
+const APPS_URL = "https://dash.vexaltech.dev/api/apps";
+const MEDIA_BASE = "https://dash.vexaltech.dev";
+
+function fixMediaUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  if (url.startsWith("http")) return url;
+  return `${MEDIA_BASE}${url}`;
+}
 
 export function AppsCarouselSection() {
   const t = useTranslations();
@@ -117,12 +123,19 @@ export function AppsCarouselSection() {
   const [index, setIndex] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
 
-  // جلب التطبيقات الحقيقية
+  // جلب التطبيقات الحقيقية (فلترة Alheekmah Library فقط)
   useEffect(() => {
     fetch(APPS_URL)
       .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
-      .then((data: AppInfo[]) => {
-        setApps(data);
+      .then((data: { apps: AppInfo[] }) => {
+        const filtered = (data.apps || [])
+          .filter((a) => a.companyName === "Alheekmah Library")
+          .map((a) => ({
+            ...a,
+            appBanner: fixMediaUrl(a.appBanner),
+            appLogo: fixMediaUrl(a.appLogo),
+          }));
+        setApps(filtered);
         setLoading(false);
       })
       .catch(() => setLoading(false));

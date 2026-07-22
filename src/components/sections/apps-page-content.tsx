@@ -7,8 +7,15 @@ import { Reveal } from "@/components/ui/reveal";
 import { PageHeader } from "@/components/ui/page-header";
 import type { AppInfo } from "@/lib/types";
 
-const APPS_URL =
-  "https://raw.githubusercontent.com/alheekmahlib/thegarlanded/master/ourApps.json";
+const APPS_URL = "https://dash.vexaltech.dev/api/apps";
+const MEDIA_BASE = "https://dash.vexaltech.dev";
+
+// بادئة الصور النسبية (الـ API يُرجع /media/...)
+function fixUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  if (url.startsWith("http")) return url;
+  return `${MEDIA_BASE}${url}`;
+}
 
 export function AppsPageContent() {
   const t = useTranslations();
@@ -23,8 +30,20 @@ export function AppsPageContent() {
         if (!r.ok) throw new Error("fetch failed");
         return r.json();
       })
-      .then((data: AppInfo[]) => {
-        setApps(data);
+      .then((data: { apps: AppInfo[] }) => {
+        // فلترة تطبيقات Alheekmah Library فقط + إصلاح روابط الصور
+        const filtered = (data.apps || data as unknown as AppInfo[])
+          .filter((a) => a.companyName === "Alheekmah Library")
+          .map((a) => ({
+            ...a,
+            appBanner: fixUrl(a.appBanner),
+            appLogo: fixUrl(a.appLogo),
+            banner1: fixUrl(a.banner1),
+            banner2: fixUrl(a.banner2),
+            banner3: fixUrl(a.banner3),
+            banner4: fixUrl(a.banner4),
+          }));
+        setApps(filtered);
         setLoading(false);
       })
       .catch(() => {

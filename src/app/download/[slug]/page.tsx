@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 // مصدر بيانات التطبيقات
 const APPS_URL =
-  "https://raw.githubusercontent.com/alheekmahlib/thegarlanded/master/ourApps.json";
+  "https://dash.vexaltech.dev/api/apps";
 
 /**
  * يطابق الـ slug مع تطبيق من ourApps.json.
@@ -57,11 +57,15 @@ export default async function DownloadRedirectPage({
   const userAgent = headerList.get("user-agent") ?? "";
   const platform = detectPlatform(userAgent);
 
-  // 2. اجلب بيانات التطبيقات
+  // 2. اجلب بيانات التطبيقات (فلترة Alheekmah Library فقط)
   let apps: AppInfo[] = [];
   try {
     const res = await fetch(APPS_URL, { next: { revalidate: 3600 } });
-    if (res.ok) apps = await res.json();
+    if (res.ok) {
+      const data = await res.json();
+      const allApps: AppInfo[] = data.apps || data;
+      apps = allApps.filter((a: AppInfo) => a.companyName === "Alheekmah Library");
+    }
   } catch {
     // تجاهل — سنعرض not-found
   }
