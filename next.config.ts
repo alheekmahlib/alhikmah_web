@@ -19,14 +19,21 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // Proxy لتجاوز CORS: توجيه طلبات /r2-books/* إلى R2
-  // هذا يجعل المتصفح يطلب من نفس النطاق (لا CORS)
+  // Proxy لتجاوز CORS
   async rewrites() {
     return [
       {
         source: "/r2-books/:urlType/:bookNumber.json",
         destination:
           "https://pub-527cd05a026a41dc9348c1e0c66bc0a6.r2.dev/:urlType/:bookNumber.json",
+      },
+      {
+        source: "/api/apps",
+        destination: "https://dash.vexaltech.dev/api/apps",
+      },
+      {
+        source: "/api/packages",
+        destination: "https://dash.vexaltech.dev/api/packages",
       },
     ];
   },

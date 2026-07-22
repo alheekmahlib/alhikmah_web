@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 // مصدر بيانات التطبيقات
 const APPS_URL =
-  "https://dash.vexaltech.dev/api/apps";
+  "/api/apps";
 
 /**
  * يطابق الـ slug مع تطبيق من ourApps.json.

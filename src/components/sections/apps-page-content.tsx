@@ -7,7 +7,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { PageHeader } from "@/components/ui/page-header";
 import type { AppInfo } from "@/lib/types";
 
-const APPS_URL = "https://dash.vexaltech.dev/api/apps";
+const APPS_URL = "/api/apps";
 const MEDIA_BASE = "https://dash.vexaltech.dev";
 
 // بادئة الصور النسبية (الـ API يُرجع /media/...)

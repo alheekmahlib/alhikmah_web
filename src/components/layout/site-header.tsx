@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 const NAV_LINKS = [
   { key: "home", href: "/" },
   { key: "quran", href: "/quran" },
+  { key: "quran_sounds", href: "/sound" },
   { key: "books", href: "/books" },
   { key: "athkar", href: "/athkar" },
   { key: "apps", href: "/apps" },

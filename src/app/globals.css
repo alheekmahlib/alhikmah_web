@@ -14,6 +14,8 @@
   /* خط النسخ للكتب والآيات */
   --font-naskh: var(--font-naskh), "Noto Naskh Arabic", serif;
   --font-quran: var(--font-naskh), "Noto Naskh Arabic", serif;
+  /* خط أسماء السور الزخرفي */
+  --font-surah-name: "SurahName", "Amiri", serif;
 
   /* ===== الأخضر الزمردي (الأساسي) ===== */
   --color-emerald: #2d6a4f;
@@ -91,6 +93,16 @@
 /* ==========================================================================
    أساسيات
    ========================================================================== */
+
+/* خط أسماء السور الزخرفي (من quran_library) */
+@font-face {
+  font-family: "SurahName";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/surah-name-v4.ttf") format("truetype");
+}
+
 @layer base {
   * {
     border-color: var(--color-rule);

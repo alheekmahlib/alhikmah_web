@@ -1,5 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
-import { QuranIframe } from "@/components/quran/quran-iframe";
+import { AudioPlayer } from "@/components/sound/audio-player";
 
 export default async function SoundPage({
   params,
@@ -8,6 +8,5 @@ export default async function SoundPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-
-  return <QuranIframe view="sound" />;
+  return <AudioPlayer />;
 }

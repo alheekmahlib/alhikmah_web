@@ -1,8 +1,8 @@
-import { setRequestLocale } from "next-intl/server";
-import { getTranslations } from "next-intl/server";
-import { Check, Target, Heart, Users, Award } from "lucide-react";
+import { setRequestLocale, getTranslations } from "next-intl/server";
+import { Target, Heart, Users, Award, Sparkles, BookOpen, Globe, Shield } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { PageHeader } from "@/components/ui/page-header";
+import { Logo } from "@/components/layout/logo";
 
 export default async function AboutPage({
   params,
@@ -20,11 +20,12 @@ export default async function AboutPage({
     { icon: Award, titleKey: "about_value_4_title", descKey: "about_value_4_desc" },
   ];
 
-  const stats = [
-    { num: "2M+", key: "about_stat_1" },
-    { num: "10+", key: "about_stat_2" },
-    { num: "4", key: "about_stat_3" },
-    { num: "100%", key: "about_stat_4" },
+  // مميزات بديل للإحصائيات
+  const features = [
+    { icon: Globe, titleKey: "about_stat_2", desc: "بما فيها العربية والإنجليزية والتركية والأردية" },
+    { icon: Shield, titleKey: "about_stat_4", desc: "بدون إعلانات أو اشتراكات، احتسابًا لوجه الله" },
+    { icon: BookOpen, titleKey: "about_stat_3", desc: "للقرآن والأذكار والقلايد والنحو وغيرها" },
+    { icon: Sparkles, titleKey: "about_value_4_title", desc: "مكتبات وواجهات برمجية مفتوحة للمطورين" },
   ];
 
   return (
@@ -35,59 +36,84 @@ export default async function AboutPage({
         lede={t("about_page_lede")}
       />
 
-      {/* القصة */}
+      {/* القصة + الشعار */}
       <section className="container-x py-12">
-        <div className="mx-auto max-w-3xl">
-          <Reveal variant="up">
-            <p className="mb-6 text-lg leading-loose text-ink-soft">
-              {t("about_page_story_1")}
-            </p>
-          </Reveal>
-          <Reveal variant="up" delay={100}>
-            <p className="mb-6 leading-loose text-ink-soft">
-              {t("about_page_story_2")}
-            </p>
-          </Reveal>
-          <Reveal variant="up" delay={200}>
-            <p className="leading-loose text-ink-soft">
-              {t("about_page_story_3")}
-            </p>
+        <div className="grid items-center gap-12 lg:grid-cols-[1.4fr_0.6fr]">
+          {/* النص */}
+          <div>
+            <Reveal variant="up">
+              <p className="mb-5 text-[1.05rem] leading-[2] text-ink-soft">
+                {t("about_page_story_1")}
+              </p>
+            </Reveal>
+            <Reveal variant="up" delay={100}>
+              <p className="mb-5 leading-[2] text-ink-soft">
+                {t("about_page_story_2")}
+              </p>
+            </Reveal>
+            <Reveal variant="up" delay={200}>
+              <p className="leading-[2] text-ink-soft">
+                {t("about_page_story_3")}
+              </p>
+            </Reveal>
+          </div>
+
+          {/* الشعار */}
+          <Reveal variant="zoom" delay={150}>
+            <div className="relative mx-auto flex items-center justify-center py-8">
+              {/* ۞ دوّارة خلفية */}
+              <div className="pointer-events-none absolute opacity-[0.08]">
+                <span className="font-naskh text-[8rem] leading-none text-emerald">۞</span>
+              </div>
+              <div className="relative z-10">
+                <Logo height={100} className="text-emerald drop-shadow-lg" />
+              </div>
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* الإحصائيات */}
-      <section className="container-x py-8">
-        <Reveal variant="zoom">
-          <div className="grid grid-cols-2 gap-4 rounded-3xl border border-rule bg-paper p-8 lg:grid-cols-4">
-            {stats.map((s, i) => (
-              <div key={i} className="text-center">
-                <div className="font-display text-4xl font-bold text-emerald-deep">
-                  {s.num}
+      {/* المميزات — بديل الإحصائيات */}
+      <section className="container-x py-10">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((f, i) => {
+            const Icon = f.icon;
+            return (
+              <Reveal key={i} variant="up" delay={i * 80}>
+                <div className="group rounded-2xl border border-rule bg-paper p-6 transition-all duration-300 hover:-translate-y-1 hover:border-emerald/30 hover:shadow-md">
+                  <div className="mb-3 grid h-12 w-12 place-items-center rounded-xl bg-emerald/8 text-emerald transition-colors group-hover:bg-emerald group-hover:text-paper-fixed">
+                    <Icon className="h-6 w-6" strokeWidth={1.6} />
+                  </div>
+                  <h3 className="mb-1.5 font-display text-base font-bold text-ink">
+                    {t(f.titleKey)}
+                  </h3>
+                  <p className="text-[0.82rem] leading-relaxed text-ink-soft">
+                    {f.desc}
+                  </p>
                 </div>
-                <div className="mt-2 text-[0.82rem] text-ink-faint">
-                  {t(s.key)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </Reveal>
+              </Reveal>
+            );
+          })}
+        </div>
       </section>
 
       {/* القيم */}
-      <section className="container-x py-12">
+      <section className="container-x py-14">
         <Reveal variant="up">
-          <h2 className="mb-8 text-center font-display text-3xl font-bold text-ink">
-            {t("about_values_title")}
-          </h2>
+          <div className="mb-10 text-center">
+            <span className="eyebrow">{t("about_eyebrow")}</span>
+            <h2 className="mt-3 font-display text-[2rem] font-extrabold text-ink">
+              {t("about_values_title")}
+            </h2>
+          </div>
         </Reveal>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {values.map((value, i) => {
             const Icon = value.icon;
             return (
               <Reveal key={value.titleKey} variant="up" delay={i * 90}>
-                <div className="rounded-2xl border border-rule bg-paper p-6 text-center transition-colors hover:border-emerald-soft">
-                  <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-emerald-deep to-emerald text-emerald-soft-fixed">
+                <div className="group rounded-2xl border border-rule bg-paper p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-emerald/30 hover:shadow-lg">
+                  <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-emerald/8 text-emerald transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald group-hover:text-paper-fixed">
                     <Icon className="h-7 w-7" strokeWidth={1.6} />
                   </div>
                   <h3 className="mb-2 font-display text-lg font-bold text-ink">
@@ -103,24 +129,17 @@ export default async function AboutPage({
         </div>
       </section>
 
-      {/* رؤيتنا */}
-      <section className="container-x py-12">
-        <Reveal variant="zoom">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-deep to-emerald p-10 text-center lg:p-14">
-            <div
-              className="pointer-events-none absolute inset-0 opacity-10"
-              style={{
-                backgroundImage:
-                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 0L50 30L80 40L50 50L40 80L30 50L0 40L30 30Z' fill='none' stroke='%23E8C97A' stroke-width='1'/%3E%3C/svg%3E\")",
-                backgroundSize: "70px",
-              }}
-            />
+      {/* رؤيتنا — أنيقة بدون خلفية خضراء */}
+      <section className="container-x py-14">
+        <Reveal variant="up">
+          <div className="relative overflow-hidden rounded-3xl border border-emerald/15 bg-paper p-10 text-center lg:p-16">
+            {/* زخرفة ۞ */}
+            <div className="pointer-events-none absolute right-8 top-6 opacity-[0.05]">
+              <span className="font-naskh text-[7rem] leading-none text-emerald">۞</span>
+            </div>
             <div className="relative z-10 mx-auto max-w-2xl">
-              <span className="font-quran text-5xl text-emerald">۞</span>
-              <h2 className="mt-4 font-display text-3xl font-bold text-emerald-soft-fixed">
-                {t("about_vision_title")}
-              </h2>
-              <p className="mt-5 text-lg leading-loose text-emerald-soft-fixed/90">
+              <span className="eyebrow">{t("about_vision_title")}</span>
+              <p className="mt-5 text-[1.2rem] leading-[2.2] text-ink">
                 {t("about_vision_text")}
               </p>
             </div>

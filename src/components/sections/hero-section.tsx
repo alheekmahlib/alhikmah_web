@@ -9,6 +9,7 @@ import {
   ParallaxLayer,
   MagneticButton,
 } from "@/components/animation/motion-primitives";
+import { Logo } from "@/components/layout/logo";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -17,30 +18,46 @@ export function HeroSection() {
 
   return (
     <section className="relative flex min-h-[calc(100vh-6rem)] items-center overflow-hidden">
-      {/* خلفية متدرّجة خفيفة + زخرفة متحركة */}
+      {/* خلفية: تدرّج خفيف + شبكة هندسية + كرات متوهجة */}
       <div className="pointer-events-none absolute inset-0">
+        {/* شبكة هندسية خفيفة */}
         <div
-          className="absolute inset-0 opacity-[0.04]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 0L62 38L100 50L62 62L50 100L38 62L0 50L38 38Z' fill='none' stroke='%232d6a4f' stroke-width='1'/%3E%3C/svg%3E\")",
-            backgroundSize: "90px",
+              "linear-gradient(to right, #2d6a4f 1px, transparent 1px), linear-gradient(to bottom, #2d6a4f 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
           }}
         />
+
+        {/* كرات متوهجة متحركة */}
         <motion.div
-          className="absolute -right-40 top-20 h-[500px] w-[500px] rounded-full bg-emerald/5 blur-3xl"
-          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+          className="absolute -right-32 top-10 h-[450px] w-[450px] rounded-full bg-emerald/8 blur-[100px]"
+          animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute -left-32 bottom-10 h-[400px] w-[400px] rounded-full bg-emerald-bright/5 blur-3xl"
+          className="absolute -left-20 bottom-0 h-[380px] w-[380px] rounded-full bg-emerald-bright/6 blur-[90px]"
           animate={{ scale: [1.1, 1, 1.1], opacity: [0.4, 0.2, 0.4] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
+
+        {/* زخرفة نجمية دوّارة في الخلفية */}
+        <motion.div
+          className="absolute right-1/4 top-1/3 opacity-[0.04]"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+        >
+          <svg width="300" height="300" viewBox="0 0 100 100" fill="none" stroke="#2d6a4f" strokeWidth="0.5">
+            <path d="M50 5L62 38L95 50L62 62L50 95L38 62L5 50L38 38Z" />
+            <circle cx="50" cy="50" r="30" />
+            <circle cx="50" cy="50" r="20" />
+          </svg>
+        </motion.div>
       </div>
 
       <div className="container-x relative z-10">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
           {/* النص */}
           <div>
             {/* شارة */}
@@ -48,18 +65,21 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
-              className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-emerald/20 bg-emerald/5 px-4 py-2"
+              className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-emerald/20 bg-emerald/5 px-4 py-2 backdrop-blur-sm"
             >
-              <Sparkles className="h-3.5 w-3.5 text-emerald" />
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald" />
+              </span>
               <span className="text-[0.78rem] font-semibold text-emerald">
                 {t("hero_badge")}
               </span>
             </motion.div>
 
-            {/* العنوان الرئيسي — تباعد أسطر كافٍ لإظهار التشكيل */}
+            {/* العنوان الرئيسي */}
             <h1
-              className="font-display text-[2.6rem] font-extrabold tracking-tight text-ink lg:text-[4.5rem]"
-              style={{ lineHeight: 1.7 }}
+              className="font-display text-[2.4rem] font-extrabold tracking-tight text-ink lg:text-[4.2rem]"
+              style={{ lineHeight: 1.5 }}
             >
               <SplitText text={t("hero_title_1")} delay={0.2} />
               <br />
@@ -67,7 +87,7 @@ export function HeroSection() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
-                className="text-emerald"
+                className="bg-gradient-to-l from-emerald to-emerald-bright bg-clip-text text-transparent"
               >
                 <SplitText text={t("hero_title_2")} delay={0.7} />
               </motion.span>
@@ -80,7 +100,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.5, duration: 0.7, ease: EASE }}
-              className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft"
+              className="mt-7 max-w-xl text-[1.05rem] leading-relaxed text-ink-soft"
             >
               {t("hero_subtitle")}
             </motion.p>
@@ -95,17 +115,19 @@ export function HeroSection() {
               <MagneticButton
                 href="/quran"
                 strength={0.25}
-                className="overflow-hidden rounded-xl bg-emerald px-7 py-3.5 font-bold text-paper-fixed shadow-emerald transition-colors hover:bg-emerald"
+                className="group relative overflow-hidden rounded-xl bg-emerald px-7 py-3.5 font-bold text-paper-fixed shadow-emerald transition-all hover:bg-emerald-deep"
               >
-                <span className="flex items-center gap-2.5">
+                <span className="relative z-10 flex items-center gap-2.5">
                   {t("cta_start_reading")}
-                  <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
+                  <ArrowLeft className="h-4 w-4 transition-transform group-hover:translate-x-[-3px] rtl:rotate-180 rtl:group-hover:translate-x-[3px]" />
                 </span>
+                {/* لمعان عند المرور */}
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full rtl:translate-x-full rtl:group-hover:translate-x-[-100%]" />
               </MagneticButton>
 
               <Link
                 href="/books"
-                className="group inline-flex items-center gap-2.5 rounded-xl border border-rule px-7 py-3.5 font-bold text-ink transition-colors hover:border-emerald hover:text-emerald"
+                className="group inline-flex items-center gap-2.5 rounded-xl border border-rule bg-paper/50 px-7 py-3.5 font-bold text-ink backdrop-blur-sm transition-all hover:border-emerald hover:bg-paper hover:text-emerald"
               >
                 <BookOpen className="h-4 w-4" />
                 {t("books_title")}
@@ -114,47 +136,76 @@ export function HeroSection() {
                 </span>
               </Link>
             </motion.div>
+
+            {/* مميزات سريعة */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.2, duration: 0.6 }}
+              className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-[0.8rem] text-ink-faint"
+            >
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-emerald" />
+                ١٠ لغات مدعومة
+              </span>
+              <span className="h-1 w-1 rounded-full bg-rule" />
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-emerald" />
+                وضع داكن وفاتح
+              </span>
+              <span className="h-1 w-1 rounded-full bg-rule" />
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-emerald" />
+                مفتوح المصدر
+              </span>
+            </motion.div>
           </div>
 
-          {/* البطاقة الجانبية — آية بتأثير parallax */}
-          <ParallaxLayer speed={0.3}>
+          {/* شعار مكتبة الحكمة — كبير بدون مستطيل */}
+          <ParallaxLayer speed={0.2}>
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, rotateY: 15 }}
-              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-              transition={{ delay: 1, duration: 0.9, ease: EASE }}
-              className="relative mx-auto max-w-sm overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-deep to-emerald p-9 text-center shadow-2xl"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1, duration: 1, ease: EASE }}
+              whileHover={{ scale: 1.05 }}
+              className="relative mx-auto flex max-w-sm flex-col items-center justify-center gap-6 py-12 text-center"
             >
-              <div
-                className="pointer-events-none absolute inset-0 opacity-10"
-                style={{
-                  backgroundImage:
-                    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0L37 23L60 30L37 37L30 60L23 37L0 30L23 23Z' fill='none' stroke='%23B7E4C7' stroke-width='1'/%3E%3C/svg%3E\")",
-                  backgroundSize: "50px",
-                }}
-              />
-              <div className="pointer-events-none absolute inset-3.5 rounded-2xl border border-emerald-light/30" />
+              {/* ۞ دوّارة خلفية كبيرة */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+                className="pointer-events-none absolute opacity-[0.08]"
+              >
+                <span className="font-naskh text-[12rem] leading-none text-emerald">۞</span>
+              </motion.div>
 
+              {/* الشعار كبير */}
               <div className="relative z-10">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                  className="mx-auto mb-5"
-                >
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="mx-auto h-10 w-10 text-emerald-light-fixed">
-                    <path d="M12 2L14.39 8.26L21 9.27L16 14.14L17.18 21L12 17.77L6.82 21L8 14.14L3 9.27L9.61 8.26L12 2Z" />
-                  </svg>
-                </motion.div>
-                <p className="font-naskh text-2xl font-bold leading-loose text-emerald-light-fixed">
-                  {t("hero_ayah_text")}
-                </p>
-                <p className="mt-4 text-xs uppercase tracking-[0.2em] text-emerald-light-fixed/70">
-                  {t("hero_ayah_ref")}
-                </p>
+                <Logo height={120} className="text-emerald drop-shadow-lg" />
               </div>
             </motion.div>
           </ParallaxLayer>
         </div>
       </div>
+
+      {/* مؤشر سكرول في الأسفل */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.5, duration: 0.5 }}
+        className="pointer-events-none absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.2em] text-ink-faint">اسحب للأسفل</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="grid h-8 w-5 place-items-start rounded-full border border-ink-faint/30 p-1"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald" />
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
 }
