@@ -44,6 +44,7 @@ export function AudioPlayer() {
   const [volume, setVolume] = useState(1);
   const [muted, setMuted] = useState(false);
   const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
+  const repeatModeRef = useRef<RepeatMode>("off");
   const [searchQuery, setSearchQuery] = useState("");
   const [reciterDropdown, setReciterDropdown] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(true);
@@ -96,13 +97,28 @@ export function AudioPlayer() {
       sound.on("pause", () => setIsPlaying(false));
       sound.on("end", () => {
         setIsPlaying(false); cancelAnimationFrame(rafRef.current);
-        if (repeatMode === "one") { sound.seek(0); sound.play(); setIsPlaying(true); }
-        else if (surahNum < 114) { setCurrentSurah(surahNum + 1); playSurah(surahNum + 1, reciterIdx, true); }
-        else if (repeatMode === "all") { setCurrentSurah(1); playSurah(1, reciterIdx, true); }
+        const mode = repeatModeRef.current;
+        if (mode === "one") {
+          // تكرار نفس السورة
+          sound.seek(0);
+          sound.play();
+          setIsPlaying(true);
+        } else if (mode === "all") {
+          // تكرار القائمة: السورة التالية أو العودة للأولى
+          const next = surahNum < 114 ? surahNum + 1 : 1;
+          setCurrentSurah(next);
+          playSurah(next, reciterIdx, true);
+        } else {
+          // off: السورة التالية فقط (بدون تكرار)
+          if (surahNum < 114) {
+            setCurrentSurah(surahNum + 1);
+            playSurah(surahNum + 1, reciterIdx, true);
+          }
+        }
       });
       setCurrentSurah(surahNum);
     },
-    [speed, volume, muted, repeatMode],
+    [speed, volume, muted],
   );
 
   const togglePlay = () => {
@@ -114,7 +130,11 @@ export function AudioPlayer() {
   const changeSpeed = () => { const sp = [0.75, 1, 1.25, 1.5, 2]; const ns = sp[(sp.indexOf(speed) + 1) % sp.length]; setSpeed(ns); if (howlRef.current) howlRef.current.rate(ns); };
   const toggleMute = () => { const m = !muted; setMuted(m); if (howlRef.current) howlRef.current.volume(m ? 0 : volume); };
   const selectReciter = (idx: number) => { setReciterIndex(idx); localStorage.setItem(STORAGE_RECITER, String(idx)); setReciterDropdown(false); if (howlRef.current) playSurah(currentSurah, idx, isPlaying); };
-  const cycleRepeat = () => setRepeatMode((p) => (p === "off" ? "all" : p === "all" ? "one" : "off"));
+  const cycleRepeat = () => {
+    const next = repeatMode === "off" ? "one" : repeatMode === "one" ? "all" : "off";
+    repeatModeRef.current = next;
+    setRepeatMode(next);
+  };
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!howlRef.current || !duration) return;
     const r = e.currentTarget.getBoundingClientRect();
