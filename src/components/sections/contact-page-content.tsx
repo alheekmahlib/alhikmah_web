@@ -33,7 +33,7 @@ export function ContactPageContent() {
           body: JSON.stringify({
             ...form,
             _captcha: "false",
-            _cc: "solteam.contact@gmail.com",
+            _cc: "info@vexaltech.dev",
           }),
         },
       );
@@ -75,18 +75,31 @@ export function ContactPageContent() {
                   {t("contact_email_label")}
                 </div>
                 <a
-                  href="mailto:solteam.contact@gmail.com"
+                  href="mailto:info@vexaltech.dev"
                   className="text-[0.92rem] font-bold text-ink hover:text-emerald-deep"
                 >
-                  solteam.contact@gmail.com
+                  info@vexaltech.dev
                 </a>
               </div>
 
-              <div className="rounded-2xl bg-gradient-to-br from-emerald-deep to-emerald p-6 text-center text-emerald-soft-fixed">
-                <div className="font-quran text-4xl">۞</div>
-                <p className="mt-2 font-quran text-lg italic">
-                  {t("contact_quote")}
-                </p>
+              <div className="relative overflow-hidden rounded-2xl border border-emerald/15 bg-paper p-8 text-center">
+                {/* زخرفة ۞ شفافة في الخلفية */}
+                <div className="pointer-events-none absolute -top-4 right-4 opacity-[0.05]">
+                  <span className="font-naskh text-[6rem] leading-none text-emerald">
+                    ۞
+                  </span>
+                </div>
+                <div className="relative z-10">
+                  {/* رمز ۞ علوي صغير + خط فاصل */}
+                  <div className="mb-4 flex items-center justify-center gap-3 text-emerald/40">
+                    <span className="h-px w-8 bg-emerald/20" />
+                    <span className="text-sm">۞</span>
+                    <span className="h-px w-8 bg-emerald/20" />
+                  </div>
+                  <p className="mx-auto max-w-xs font-quran text-[1.05rem] leading-loose text-ink-soft">
+                    {t("contact_quote")}
+                  </p>
+                </div>
               </div>
             </div>
           </Reveal>

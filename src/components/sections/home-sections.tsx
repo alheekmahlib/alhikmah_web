@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { BookOpen, Headphones, Library, Heart, ArrowLeft, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { AppInfo } from "@/lib/types";
+import { fetchApps } from "@/lib/api-cache";
 import { useState, useEffect } from "react";
 import {
   MotionReveal,
@@ -118,7 +119,6 @@ export function AyahMarqueeSection() {
 /* ==========================================================================
    قسم تطبيقاتنا — Carousel فاخر
    ========================================================================== */
-const APPS_URL = "/api/apps";
 const MEDIA_BASE = "https://dash.vexaltech.dev";
 
 function fixMediaUrl(url?: string): string | undefined {
@@ -135,16 +135,22 @@ export function AppsCarouselSection() {
   const [autoPlay, setAutoPlay] = useState(true);
 
   useEffect(() => {
-    fetch(APPS_URL)
-      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
-      .then((data: { apps: AppInfo[] }) => {
+    // fetchApps يوفّر كاش (ذاكرة + localStorage) و timeout، فيمنع
+    // انفجار الطلبات عند تبديل اللغة ولا يعلّق لو تأخّر الـ upstream.
+    let cancelled = false;
+    fetchApps<{ apps: AppInfo[] }>()
+      .then((data) => {
+        if (cancelled) return;
         const filtered = (data.apps || [])
           .filter((a) => a.companyName === "Alheekmah Library")
           .map((a) => ({ ...a, appBanner: fixMediaUrl(a.appBanner), appLogo: fixMediaUrl(a.appLogo) }));
         setApps(filtered);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {

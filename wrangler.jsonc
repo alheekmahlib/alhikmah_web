@@ -17,5 +17,13 @@
   "vars": {
     "NEXT_PUBLIC_QURAN_IFRAME_URL": "https://alhikmah-quran.haozo89.workers.dev",
     "NEXT_PUBLIC_SITE_URL": "https://alhikmah.ahmedlabtop4.workers.dev"
-  }
+  },
+  // كاش الصفحات الثابتة عبر R2: يمنع إعادة SSR عند كل طلب (سبب أخطاء 503 عند تبديل اللغة).
+  // يجب إنشاء الـ bucket أولاً: npx wrangler r2 bucket create alhikmah-opennext-cache
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "alhikmah-opennext-cache"
+    }
+  ]
 }

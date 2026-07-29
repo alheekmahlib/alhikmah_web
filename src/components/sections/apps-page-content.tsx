@@ -6,8 +6,8 @@ import { ExternalLink, Loader2, X } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { PageHeader } from "@/components/ui/page-header";
 import type { AppInfo } from "@/lib/types";
+import { fetchApps } from "@/lib/api-cache";
 
-const APPS_URL = "/api/apps";
 const MEDIA_BASE = "https://dash.vexaltech.dev";
 
 // بادئة الصور النسبية (الـ API يُرجع /media/...)
@@ -25,12 +25,12 @@ export function AppsPageContent() {
   const [selected, setSelected] = useState<AppInfo | null>(null);
 
   useEffect(() => {
-    fetch(APPS_URL)
-      .then((r) => {
-        if (!r.ok) throw new Error("fetch failed");
-        return r.json();
-      })
-      .then((data: { apps: AppInfo[] }) => {
+    // fetchApps يوفّر كاش (ذاكرة + localStorage) و timeout، فيمنع
+    // انفجار الطلبات عند تبديل اللغة ولا يعلّق لو تأخّر الـ upstream.
+    let cancelled = false;
+    fetchApps<{ apps: AppInfo[] }>()
+      .then((data) => {
+        if (cancelled) return;
         // فلترة تطبيقات Alheekmah Library فقط + إصلاح روابط الصور
         const filtered = (data.apps || data as unknown as AppInfo[])
           .filter((a) => a.companyName === "Alheekmah Library")
@@ -47,9 +47,11 @@ export function AppsPageContent() {
         setLoading(false);
       })
       .catch(() => {
+        if (cancelled) return;
         setError(true);
         setLoading(false);
       });
+    return () => { cancelled = true; };
   }, []);
 
   return (

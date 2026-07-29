@@ -1,30 +1,12 @@
-// @ts-nocheck
-const config = {
-  default: {
-    override: {
-      wrapper: "cloudflare-node",
-      converter: "edge",
-      proxyExternalRequest: "fetch",
-      incrementalCache: "dummy",
-      tagCache: "dummy",
-      queue: "dummy",
-    },
-  },
-  edgeExternals: ["node:crypto"],
-  middleware: {
-    external: true,
-    override: {
-      wrapper: "cloudflare-edge",
-      converter: "edge",
-      proxyExternalRequest: "fetch",
-      incrementalCache: "dummy",
-      tagCache: "dummy",
-      queue: "direct",
-    },
-  },
-  cloudflare: {
-    dangerousDisableConfigValidation: true,
-  },
-};
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
+import r2IncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/r2-incremental-cache";
 
-export default config;
+// الكاش الحقيقي عبر R2 bucket (الخيار الرسمي الموصى به في @opennextjs/cloudflare 1.20.x).
+// يحل أخطاء 503 عند تبديل اللغة: بدلاً من أن يُعاد SSR بارد كامل لكل طلب RSC prefetch
+// (ما ينهار الـ Worker تحت حمله المتزامن)، تُخزَّن صفحاتنا الثابتة في R2 وتُقدَّم فوراً.
+//
+// ملاحظة: tagCache وqueue يبقيان "dummy" افتراضياً (لا نستخدم revalidateTag ولا ISR زمني)،
+// وكل صفحاتنا الثابتة لا تحتاج إلا التخزين المؤقت البسيط.
+export default defineCloudflareConfig({
+  incrementalCache: r2IncrementalCache,
+});

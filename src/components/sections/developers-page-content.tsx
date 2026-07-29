@@ -7,8 +7,8 @@ import { Code2, ExternalLink, X } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { MotionReveal, MotionStagger, MotionStaggerItem } from "@/components/animation/motion-primitives";
 import { cn } from "@/lib/utils";
+import { fetchPackages } from "@/lib/api-cache";
 
-const PACKAGES_URL = "/api/packages";
 const MEDIA_BASE = "https://dash.vexaltech.dev";
 
 interface Package {
@@ -38,9 +38,12 @@ export function DevelopersPageContent() {
   const [selected, setSelected] = useState<Package | null>(null);
 
   useEffect(() => {
-    fetch(PACKAGES_URL)
-      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
-      .then((data: { packages: Package[] }) => {
+    // fetchPackages يوفّر كاش (ذاكرة + localStorage) و timeout، فيمنع
+    // انفجار الطلبات عند تبديل اللغة ولا يعلّق لو تأخّر الـ upstream.
+    let cancelled = false;
+    fetchPackages<{ packages: Package[] }>()
+      .then((data) => {
+        if (cancelled) return;
         const filtered = (data.packages || [])
           .filter((p) => p.companyName === "Alheekmah Library")
           .map((p) => ({
@@ -51,7 +54,12 @@ export function DevelopersPageContent() {
         setPackages(filtered);
         setLoading(false);
       })
-      .catch(() => { setError(true); setLoading(false); });
+      .catch(() => {
+        if (cancelled) return;
+        setError(true);
+        setLoading(false);
+      });
+    return () => { cancelled = true; };
   }, []);
 
   if (loading) {

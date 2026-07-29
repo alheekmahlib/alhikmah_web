@@ -16,10 +16,11 @@ import {
   Check,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { SURAH_RECITERS, getSurahAudioUrl, type Surah } from "@/lib/audio-data";
 import surahsData from "@/data/quran-surahs.json";
 import { cn } from "@/lib/utils";
+import { isRtl } from "@/i18n/routing";
 
 const surahs = surahsData as Surah[];
 
@@ -36,6 +37,8 @@ const fmt = (s: number) => {
 
 export function AudioPlayer() {
   const t = useTranslations();
+  const locale = useLocale();
+  const rtl = isRtl(locale);
   const [currentSurah, setCurrentSurah] = useState(1);
   const [reciterIndex, setReciterIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -54,6 +57,8 @@ export function AudioPlayer() {
   const howlRef = useRef<Howl | null>(null);
   const rafRef = useRef<number>(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);
+  const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_RECITER);
@@ -137,15 +142,50 @@ export function AudioPlayer() {
     repeatModeRef.current = next;
     setRepeatMode(next);
   };
-  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+  // حساب نسبة التقدّم من موضع المؤشر داخل عنصر محدّد
+  const pctFromEvent = (clientX: number, el: HTMLElement) => {
+    const r = el.getBoundingClientRect();
+    const pct = rtl ? (r.right - clientX) / r.width : (clientX - r.left) / r.width;
+    return Math.max(0, Math.min(1, pct));
+  };
+
+  const seekTo = (el: HTMLElement, clientX: number) => {
     if (!howlRef.current || !duration) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    // في RTL: النقطة 0 هي على اليمين، لذا نحسب من اليمين
-    const isRTL = document.documentElement.dir === "rtl";
-    const pct = isRTL ? (r.right - e.clientX) / r.width : (e.clientX - r.left) / r.width;
-    const t = Math.max(0, Math.min(1, pct)) * duration;
+    const t = pctFromEvent(clientX, el) * duration;
     howlRef.current.seek(t);
     setCurrentTime(t);
+  };
+
+  // دعم السحب على المستوى العالمي أثناء التفاعل
+  useEffect(() => {
+    if (!dragging) return;
+    const onMove = (e: PointerEvent) => {
+      const el = activeBarRef.current;
+      if (el) seekTo(el, e.clientX);
+    };
+    const onUp = () => {
+      draggingRef.current = false;
+      setDragging(false);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dragging, duration]);
+
+  const activeBarRef = useRef<HTMLDivElement | null>(null);
+
+  const startSeek = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!howlRef.current || !duration) return;
+    activeBarRef.current = e.currentTarget;
+    draggingRef.current = true;
+    setDragging(true);
+    // ابدأ التقديم فوراً عند النقرة الأولى
+    seekTo(e.currentTarget, e.clientX);
+    e.currentTarget.setPointerCapture?.(e.pointerId);
   };
 
   useEffect(() => () => { if (howlRef.current) howlRef.current.unload(); cancelAnimationFrame(rafRef.current); }, []);
@@ -301,7 +341,7 @@ export function AudioPlayer() {
                 <div className="flex flex-1 items-center gap-3">
                   {/* السابق */}
                   <button onClick={playPrev} className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-lg text-ink-soft transition-colors hover:bg-bg-warm hover:text-emerald" aria-label="prev">
-                    <SkipForward className="h-4 w-4" />
+                    <SkipBack className="h-4 w-4 rtl:scale-x-[-1]" />
                   </button>
 
                   {/* تشغيل */}
@@ -317,15 +357,24 @@ export function AudioPlayer() {
 
                   {/* التالي */}
                   <button onClick={playNext} className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-lg text-ink-soft transition-colors hover:bg-bg-warm hover:text-emerald" aria-label="next">
-                    <SkipBack className="h-4 w-4" />
+                    <SkipForward className="h-4 w-4 rtl:scale-x-[-1]" />
                   </button>
 
                   {/* شريط التقدّم */}
                   <div className="flex flex-1 items-center gap-2">
                     <span className="hidden w-10 text-end text-[0.68rem] tabular-nums text-ink-faint sm:block">{fmt(currentTime)}</span>
-                    <div onClick={seek} className="group relative h-1.5 flex-1 cursor-pointer rounded-full bg-bg-warm">
-                      <div className="absolute inset-y-0 right-0 rounded-full bg-emerald transition-all" style={{ width: `${progress}%` }} />
-                      <div className="absolute top-1/2 h-3 w-3 -translate-y-1/2 translate-x-1/2 rounded-full bg-paper opacity-0 shadow ring-2 ring-emerald transition-opacity group-hover:opacity-100" style={{ right: `${progress}%` }} />
+                    <div
+                      onPointerDown={startSeek}
+                      className="group relative h-1.5 flex-1 cursor-pointer rounded-full bg-bg-warm"
+                    >
+                      <div
+                        className={cn("absolute inset-y-0 rounded-full bg-emerald transition-all", dragging ? "transition-none" : "")}
+                        style={{ width: `${progress}%`, [rtl ? "right" : "left"]: 0 }}
+                      />
+                      <div
+                        className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-paper shadow ring-2 ring-emerald transition-opacity group-hover:opacity-100 group-active:opacity-100 ltr:translate-x-[-50%] rtl:translate-x-1/2"
+                        style={{ opacity: 0, [rtl ? "right" : "left"]: `${progress}%` }}
+                      />
                     </div>
                     <span className="hidden w-10 text-[0.68rem] tabular-nums text-ink-faint sm:block">{fmt(duration)}</span>
                   </div>
@@ -346,8 +395,14 @@ export function AudioPlayer() {
               {/* شريط التقدّم للجوال (تحت الأزرار) */}
               <div className="mt-2 flex items-center gap-2 sm:hidden">
                 <span className="w-8 text-end text-[0.62rem] tabular-nums text-ink-faint">{fmt(currentTime)}</span>
-                <div onClick={seek} className="relative h-1 flex-1 cursor-pointer rounded-full bg-bg-warm">
-                  <div className="absolute inset-y-0 right-0 rounded-full bg-emerald" style={{ width: `${progress}%` }} />
+                <div
+                  onPointerDown={startSeek}
+                  className="relative h-1 flex-1 cursor-pointer rounded-full bg-bg-warm"
+                >
+                  <div
+                    className={cn("absolute inset-y-0 rounded-full bg-emerald transition-all", dragging ? "transition-none" : "")}
+                    style={{ width: `${progress}%`, [rtl ? "right" : "left"]: 0 }}
+                  />
                 </div>
                 <span className="w-8 text-[0.62rem] tabular-nums text-ink-faint">{fmt(duration)}</span>
               </div>
