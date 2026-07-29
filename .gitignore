@@ -36,6 +36,18 @@ yarn-error.log*
 # vercel
 .vercel
 
+# open-next (build output for Cloudflare Workers)
+.open-next/
+
+# cloudflare wrangler (local state/cache)
+.wrangler/
+
+# playwright test artifacts
+.playwright-mcp/
+
+# zcode agent workspace
+.zcode/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
