@@ -16,6 +16,7 @@ import {
   Check,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useTranslations } from "next-intl";
 import { SURAH_RECITERS, getSurahAudioUrl, type Surah } from "@/lib/audio-data";
 import surahsData from "@/data/quran-surahs.json";
 import { cn } from "@/lib/utils";
@@ -34,6 +35,7 @@ const fmt = (s: number) => {
 };
 
 export function AudioPlayer() {
+  const t = useTranslations();
   const [currentSurah, setCurrentSurah] = useState(1);
   const [reciterIndex, setReciterIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -158,8 +160,8 @@ export function AudioPlayer() {
       <div className="container-x pt-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="font-display text-2xl font-extrabold text-ink lg:text-3xl">المصحف الصوتي</h1>
-            <p className="mt-1 text-[0.86rem] text-ink-soft">استمع للقرآن الكريم بأصوات نخبة من القرّاء</p>
+            <h1 className="font-display text-2xl font-extrabold text-ink lg:text-3xl">{t("sound_title")}</h1>
+            <p className="mt-1 text-[0.86rem] text-ink-soft">{t("sound_subtitle")}</p>
           </div>
 
           {/* Dropdown القراء */}
@@ -173,7 +175,7 @@ export function AudioPlayer() {
                 <img src="/slider-icon.svg" alt="" className="h-7 w-7" style={{ filter: "brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(748%) hue-rotate(95deg) brightness(93%) contrast(88%)" }} />
               </div>
               <div className="hidden text-start sm:block">
-                <p className="text-[0.62rem] uppercase tracking-wide text-ink-faint">القارئ</p>
+                <p className="text-[0.62rem] uppercase tracking-wide text-ink-faint">{t("sound_reciter")}</p>
                 <p className="font-display text-[0.86rem] font-bold text-ink">{reciter.arabicName}</p>
               </div>
               <ChevronDown className={cn("h-4 w-4 text-ink-faint transition-transform", reciterDropdown && "rotate-180")} />
@@ -222,7 +224,7 @@ export function AudioPlayer() {
         <div className="relative mb-4">
           <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
           <input
-            type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="ابحث عن سورة..."
+            type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("sound_search_placeholder")}
             className="w-full rounded-xl border border-rule bg-paper py-2.5 pr-10 pl-4 text-[0.9rem] text-ink outline-none transition-colors placeholder:text-ink-faint focus:border-emerald"
           />
         </div>
@@ -257,7 +259,7 @@ export function AudioPlayer() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className={cn("truncate font-surah-name text-[1.9rem] leading-tight", isCurrent ? "text-emerald" : "text-ink")}>{`surah${String(surah.number).padStart(3, "0")}`}</p>
-                  <p className="truncate text-[0.8rem] text-ink-faint">{surah.englishName} · {surah.ayahCount} آية · {surah.revelationType === "Meccan" ? "مكية" : "مدنية"}</p>
+                  <p className="truncate text-[0.8rem] text-ink-faint">{surah.englishName} · {surah.ayahCount} {t("sound_ayah")} · {surah.revelationType === "Meccan" ? t("sound_meccan") : t("sound_medinan")}</p>
                 </div>
                 {isCurrent && isPlaying && (
                   <div className="flex items-center gap-0.5">

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { useTheme } from "@/components/theme/theme-provider";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { Logo } from "./logo";
+import { LanguageSwitcher } from "./language-switcher";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -74,6 +75,8 @@ export function SiteHeader() {
 
         {/* الأدوات */}
         <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+
           <button
             onClick={toggleTheme}
             aria-label={t("changeTheme")}

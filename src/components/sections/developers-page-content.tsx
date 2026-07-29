@@ -87,7 +87,7 @@ export function DevelopersPageContent() {
             </div>
             <div>
               <h2 className="font-display text-2xl font-bold text-ink">{t("developers_library")}</h2>
-              <p className="text-[0.88rem] text-ink-soft">حزم Flutter مفتوحة المصدر من مكتبة الحكمة</p>
+              <p className="text-[0.88rem] text-ink-soft">{t("developers_library_desc")}</p>
             </div>
           </div>
         </MotionReveal>

@@ -146,17 +146,17 @@ export function HeroSection() {
             >
               <span className="flex items-center gap-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-emerald" />
-                ١٠ لغات مدعومة
+                {t("hero_feature_quran")}
               </span>
               <span className="h-1 w-1 rounded-full bg-rule" />
               <span className="flex items-center gap-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-emerald" />
-                وضع داكن وفاتح
+                {t("hero_feature_recitations")}
               </span>
               <span className="h-1 w-1 rounded-full bg-rule" />
               <span className="flex items-center gap-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-emerald" />
-                مفتوح المصدر
+                {t("hero_feature_athkar")}
               </span>
             </motion.div>
           </div>
@@ -196,7 +196,7 @@ export function HeroSection() {
         className="pointer-events-none absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <div className="flex flex-col items-center gap-2">
-          <span className="text-[0.68rem] uppercase tracking-[0.2em] text-ink-faint">اسحب للأسفل</span>
+          <span className="text-[0.68rem] uppercase tracking-[0.2em] text-ink-faint">{t("hero_scroll_down")}</span>
           <motion.div
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}

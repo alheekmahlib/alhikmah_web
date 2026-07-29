@@ -22,10 +22,10 @@ export default async function AboutPage({
 
   // مميزات بديل للإحصائيات
   const features = [
-    { icon: Globe, titleKey: "about_stat_2", desc: "بما فيها العربية والإنجليزية والتركية والأردية" },
-    { icon: Shield, titleKey: "about_stat_4", desc: "بدون إعلانات أو اشتراكات، احتسابًا لوجه الله" },
-    { icon: BookOpen, titleKey: "about_stat_3", desc: "للقرآن والأذكار والقلايد والنحو وغيرها" },
-    { icon: Sparkles, titleKey: "about_value_4_title", desc: "مكتبات وواجهات برمجية مفتوحة للمطورين" },
+    { icon: Globe, titleKey: "about_stat_2", descKey: "about_feature_langs_desc" },
+    { icon: Shield, titleKey: "about_stat_4", descKey: "about_feature_free_desc" },
+    { icon: BookOpen, titleKey: "about_stat_3", descKey: "about_feature_apps_desc" },
+    { icon: Sparkles, titleKey: "about_value_4_title", descKey: "about_feature_openness_desc" },
   ];
 
   return (
@@ -88,7 +88,7 @@ export default async function AboutPage({
                     {t(f.titleKey)}
                   </h3>
                   <p className="text-[0.82rem] leading-relaxed text-ink-soft">
-                    {f.desc}
+                    {t(f.descKey)}
                   </p>
                 </div>
               </Reveal>

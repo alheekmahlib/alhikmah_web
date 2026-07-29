@@ -1,0 +1,19 @@
+{
+  "/[locale]/about/page": "/[locale]/about",
+  "/[locale]/apps/page": "/[locale]/apps",
+  "/[locale]/athkar/page": "/[locale]/athkar",
+  "/[locale]/books/[bookNumber]/page": "/[locale]/books/[bookNumber]",
+  "/[locale]/books/page": "/[locale]/books",
+  "/[locale]/contact-us/page": "/[locale]/contact-us",
+  "/[locale]/developers/page": "/[locale]/developers",
+  "/[locale]/faq/page": "/[locale]/faq",
+  "/[locale]/page": "/[locale]",
+  "/[locale]/quran/page": "/[locale]/quran",
+  "/[locale]/sound/page": "/[locale]/sound",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/download/[slug]/page": "/download/[slug]",
+  "/icon.svg/route": "/icon.svg",
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml"
+}

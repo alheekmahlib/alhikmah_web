@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "alhikmah",
+  "account_id": "ed519f07a1b42668401691fe554d4106",
+  "compatibility_date": "2026-07-22",
+  "observability": {
+    "enabled": true
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": ".open-next/worker.js",
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "NEXT_PUBLIC_QURAN_IFRAME_URL": "https://alhikmah-quran.haozo89.workers.dev",
+    "NEXT_PUBLIC_SITE_URL": "https://alhikmah.ahmedlabtop4.workers.dev"
+  }
+}

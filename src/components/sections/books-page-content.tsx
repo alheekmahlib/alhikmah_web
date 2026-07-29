@@ -6,7 +6,7 @@ import { Search, FileText, Clock, X } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { PageHeader } from "@/components/ui/page-header";
 import { BookCover } from "@/components/ui/book-cover";
-import { getAllCategories, CATEGORY_NAMES_AR } from "@/lib/data";
+import { getAllCategories, CATEGORY_I18N_KEYS } from "@/lib/data";
 import { getLastReadBooks, removeFromLastRead, type LastReadEntry } from "@/lib/last-read";
 import type { Book, BookCategory } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -51,7 +51,7 @@ export function BooksPageContent() {
     const allTab = { type: "all", label: t("books_tab_all"), count: categories.reduce((s, c) => s + c.booksType.length, 0) };
     const catTabs = categories.map((c) => ({
       type: c.type,
-      label: CATEGORY_NAMES_AR[c.type] ?? c.type,
+      label: t(CATEGORY_I18N_KEYS[c.type] ?? c.type),
       count: c.booksType.length,
     }));
     return [allTab, ...catTabs];
@@ -202,7 +202,7 @@ function BookCard({ book, t }: { book: Book; t: (key: string) => string }) {
         )}
         <div className="mt-auto flex items-center gap-2 pt-2 text-[0.7rem] text-ink-faint">
           <span className="rounded-md bg-bg-warm px-1.5 py-0.5 font-semibold text-emerald">
-            {CATEGORY_NAMES_AR[book.bookType] ?? book.bookType}
+            {t(CATEGORY_I18N_KEYS[book.bookType] ?? book.bookType)}
           </span>
           <span>{book.PageTotal.toLocaleString("ar-EG")} {t("books_pages")}</span>
         </div>

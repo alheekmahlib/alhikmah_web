@@ -104,25 +104,25 @@ export function getBooksByType(type: string): Book[] {
 }
 
 // أسماء عربية للفئات (للعرض)
-export const CATEGORY_NAMES_AR: Record<string, string> = {
-  tafsir: "التفسير",
-  hadiths: "الحديث",
-  "shuruh_al-hadiths": "شروح الحديث",
-  aqeedah: "العقيدة",
-  "asul_el-feqh": "أصول الفقه",
-  eulum_alfiqh_wal_awaeid_alfiqhia: "علوم الفقه والعوائد الفقهية",
-  fegh_hanafi: "الفقه الحنفي",
-  fegh_maliki: "الفقه المالكي",
-  fegh_shafii: "الفقه الشافعي",
-  fegh_hanbali: "الفقه الحنبلي",
-  general_fegh: "الفقه العام",
-  fegh_masayil: "مسائل فقهية",
-  alsiyasat_alshareiat_walqada: "السياسة الشرعية والقضاء",
-  alfarayid_walwasaya: "الفرائد والوصايا",
-  alraqayiq_waladab_waladhkar: "الرقائق والأدب والأذكار",
-  alsiyrat_alnabawia: "السيرة النبوية",
-  history: "التاريخ",
-  altarajim_waltabaqat: "التراجم والطبقات",
+export const CATEGORY_I18N_KEYS: Record<string, string> = {
+  tafsir: "category_tafsir",
+  hadiths: "category_hadiths",
+  "shuruh_al-hadiths": "category_shuruh_al_hadiths",
+  aqeedah: "category_aqeedah",
+  "asul_el-feqh": "category_asul_el_fegh",
+  eulum_alfiqh_wal_awaeid_alfiqhia: "category_eulum_alfiqh_wal_awaeid_alfiqhia",
+  fegh_hanafi: "category_fegh_hanafi",
+  fegh_maliki: "category_fegh_maliki",
+  fegh_shafii: "category_fegh_shafii",
+  fegh_hanbali: "category_fegh_hanbali",
+  general_fegh: "category_general_fegh",
+  fegh_masayil: "category_fegh_masayil",
+  alsiyasat_alshareiat_walqada: "category_alsiyasat_alshareiat_walqada",
+  alfarayid_walwasaya: "category_alfarayid_walwasaya",
+  alraqayiq_waladab_waladhkar: "category_alraqayiq_waladab_waladhkar",
+  alsiyrat_alnabawia: "category_alsiyrat_alnabawia",
+  history: "category_history",
+  altarajim_waltabaqat: "category_altarajim_waltabaqat",
 };
 
 export function getBook(number: number): Book | undefined {
