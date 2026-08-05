@@ -7,8 +7,10 @@ import type { AppInfo } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 // مصدر بيانات التطبيقات
-const APPS_URL =
-  "/api/apps";
+// يجب أن يكون رابطًا مطلقًا: تُجرى هذه الـ fetch من Server Component على
+// Cloudflare Workers، حيث قواعد rewrites() في next.config.ts لا تنطبق على
+// استدعاءات fetch الصادرة من الخادم ولا يوجد host أساسي للروابط النسبية.
+const APPS_URL = "https://dash.vexaltech.dev/api/apps";
 
 /**
  * يطابق الـ slug مع تطبيق من ourApps.json.
@@ -66,8 +68,9 @@ export default async function DownloadRedirectPage({
       const allApps: AppInfo[] = data.apps || data;
       apps = allApps.filter((a: AppInfo) => a.companyName === "Alheekmah Library");
     }
-  } catch {
-    // تجاهل — سنعرض not-found
+  } catch (err) {
+    // سجّل الخطأ بدل ابتلاعه صامتًا — يُسهّل كشف الانحدارات في سجلات Workers
+    console.error("[download] fetch apps failed:", err);
   }
 
   // 3. طابق الـ slug
