@@ -1,7 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "alhikmah",
-  "account_id": "ed519f07a1b42668401691fe554d4106",
+  // لا نُصلّب account_id هنا: بيئة Cloudflare Workers Builds تضبط
+  // CLOUDFLARE_ACCOUNT_ID تلقائياً (حساب المالك)، وwrangler يعتمده عند النشر.
+  // كتابة معرّف ثابت تُفشل النشر عند اختلاف الحساب (خطأ "account_id must match").
   "compatibility_date": "2026-07-22",
   "observability": {
     "enabled": true
