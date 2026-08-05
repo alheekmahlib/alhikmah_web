@@ -7,7 +7,9 @@ import { BookOpen, Headphones, Library, Heart, ArrowLeft, ChevronLeft, ChevronRi
 import type { LucideIcon } from "lucide-react";
 import type { AppInfo } from "@/lib/types";
 import { fetchApps } from "@/lib/api-cache";
+import { getLocalizedField } from "@/lib/platform-detect";
 import { useState, useEffect } from "react";
+import { useLocale } from "next-intl";
 import {
   MotionReveal,
   MotionStagger,
@@ -129,6 +131,7 @@ function fixMediaUrl(url?: string): string | undefined {
 
 export function AppsCarouselSection() {
   const t = useTranslations();
+  const locale = useLocale();
   const [apps, setApps] = useState<AppInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
@@ -202,7 +205,7 @@ export function AppsCarouselSection() {
               <div className="relative h-52 overflow-hidden rounded-2xl shadow-lg">
                 {apps[index].appBanner ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={apps[index].appBanner} alt={apps[index].appTitle} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <img src={apps[index].appBanner} alt={getLocalizedField(apps[index].appName, locale, "name")} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 ) : (
                   <div className="grid h-full place-items-center bg-gradient-to-br from-emerald-deep to-emerald">
                     <svg viewBox="0 0 24 24" fill="currentColor" className="h-16 w-16 text-emerald-light-fixed"><path d="M12 2L14.39 8.26L21 9.27L16 14.14L17.18 21L12 17.77L6.82 21L8 14.14L3 9.27L9.61 8.26L12 2Z" /></svg>
@@ -217,9 +220,9 @@ export function AppsCarouselSection() {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={apps[index].appLogo} alt="" className="h-9 w-9 rounded-xl object-contain" />
                   )}
-                  <h3 className="font-display text-[1.6rem] font-bold text-ink">{apps[index].appTitle}</h3>
+                  <h3 className="font-display text-[1.6rem] font-bold text-ink">{getLocalizedField(apps[index].appName, locale, "name")}</h3>
                 </div>
-                <p className="mb-6 text-[0.95rem] leading-relaxed text-ink-soft">{apps[index].body}</p>
+                <p className="mb-6 text-[0.95rem] leading-relaxed text-ink-soft">{getLocalizedField(apps[index].body, locale, "value")}</p>
                 <div className="flex flex-wrap items-center gap-3">
                   <Link href="/apps" className="group/btn inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-2.5 text-[0.86rem] font-bold text-paper-fixed shadow-emerald transition-transform hover:-translate-y-0.5">
                     {t("apps_view_details")} <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover/btn:-translate-x-0.5 rtl:rotate-180" />

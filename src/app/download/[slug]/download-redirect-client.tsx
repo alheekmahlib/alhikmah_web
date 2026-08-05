@@ -6,30 +6,22 @@ import { Download, Smartphone, Apple, ExternalLink } from "lucide-react";
 import {
   detectPlatform,
   getStoreUrl,
-  normalizeSlug,
 } from "@/lib/platform-detect";
 import type { AppInfo } from "@/lib/types";
 import { fetchApps } from "@/lib/api-cache";
 
-/** مطابقة الـ slug مع تطبيق (مطابقة لمنطق Flutter). */
+/**
+ * مطابقة الـ slug مع تطبيق.
+ * في الـ API الجديد، كل تطبيق له حقل `slug` مباشر، فالمطابقة تصبح بسيطة.
+ * نُبقي fallback على id للتوافق مع الرابط القديم.
+ */
 function matchApp(slug: string, apps: AppInfo[]): AppInfo | undefined {
   const normalizedSlug = slug.toLowerCase().trim();
   return apps.find((app) => {
-    if (app.appName?.trim().toLowerCase() === normalizedSlug) return true;
-    const normalizedTitle = normalizeSlug(app.appTitle || "");
-    if (normalizedTitle === normalizedSlug || normalizedTitle.includes(normalizedSlug))
-      return true;
+    // 1) مطابقة مباشرة على slug (الحقل الرسمي)
+    if (app.slug?.toLowerCase().trim() === normalizedSlug) return true;
+    // 2) fallback: id كنص
     if (String(app.id) === normalizedSlug) return true;
-    const allUrls = [
-      app.urlAppStore,
-      app.urlPlayStore,
-      app.urlAppGallery,
-      app.urlMacAppStore,
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-    if (allUrls.includes(normalizedSlug)) return true;
     return false;
   });
 }

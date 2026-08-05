@@ -55,22 +55,31 @@ export interface AthkarItem {
   zekr: string;
 }
 
+/** حقل نصي متعدد اللغات من الـ API (مثل appName و body). */
+export interface LocalizedField {
+  lang: string;
+  name?: string; // يُستخدم في appName
+  value?: string; // يُستخدم في body / aboutApp
+}
+
 export interface AppInfo {
   id: number;
-  appTitle: string;
-  appName?: string;
+  /** معرّف فريد في الرابط: /download/{slug} */
+  slug: string;
+  /** اسم التطبيق متعدد اللغات [{lang, name}] */
+  appName: LocalizedField[];
   companyName?: string;
-  body: string;
+  /** الوصف متعدد اللغات [{lang, value}] */
+  body: LocalizedField[];
+  /** نبذة إضافية متعددة اللغات [{lang, value}] */
+  aboutApp?: LocalizedField[];
   appLogo?: string;
   appBanner?: string;
+  /** معرض الصور (5 صور في الـ API الجديد) */
   banners?: string[];
-  banner1?: string;
-  banner2?: string;
-  banner3?: string;
-  banner4?: string;
-  aboutApp2?: string;
-  aboutApp3?: string;
   tags?: string[];
+  dynamicLink?: string;
+  privacyPolicyHtml?: string;
   urlAppStore?: string;
   urlPlayStore?: string;
   urlAppGallery?: string;

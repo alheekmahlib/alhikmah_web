@@ -3,6 +3,8 @@
  * يعمل على الخادم (server-side) عبر headers.
  */
 
+import type { LocalizedField } from "./types";
+
 export type Platform = "huawei" | "ios" | "android" | "macos" | "desktop";
 
 // كلمات هواوي المفتاحية (من download_redirect_controller.dart)
@@ -78,4 +80,33 @@ export function normalizeSlug(text: string): string {
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * يستخرج النص المناسب للّغة المطلوبة من حقل متعدد اللغات [{lang, name|value}].
+ * أولوية: اللغة المطلوبة → العربية → أول لغة متاحة.
+ *
+ * @param field    مصفوفة الحقول المحلية (appName أو body أو aboutApp).
+ * @param locale   اللغة المطلوبة (ar, en, tr, ...).
+ * @param key      "name" لـ appName أو "value" لـ body/aboutApp.
+ */
+export function getLocalizedField(
+  field: LocalizedField[] | undefined,
+  locale: string,
+  key: "name" | "value" = "value",
+): string {
+  if (!field || !Array.isArray(field) || field.length === 0) return "";
+  // 1) اللغة المطلوبة
+  const match = field.find((f) => f.lang === locale);
+  if (match && (match[key] ?? match.value ?? match.name)) {
+    return (match[key] ?? match.value ?? match.name) as string;
+  }
+  // 2) العربية كـ fallback
+  const ar = field.find((f) => f.lang === "ar");
+  if (ar && (ar[key] ?? ar.value ?? ar.name)) {
+    return (ar[key] ?? ar.value ?? ar.name) as string;
+  }
+  // 3) أول لغة متاحة
+  const first = field[0];
+  return (first[key] ?? first.value ?? first.name ?? "") as string;
 }
