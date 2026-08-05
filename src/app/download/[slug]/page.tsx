@@ -6,12 +6,6 @@ import type { AppInfo } from "@/lib/types";
 // صفحة ديناميكية (لا تُعرض مسبقًا)
 export const dynamic = "force-dynamic";
 
-// مصدر بيانات التطبيقات
-// يجب أن يكون رابطًا مطلقًا: تُجرى هذه الـ fetch من Server Component على
-// Cloudflare Workers، حيث قواعد rewrites() في next.config.ts لا تنطبق على
-// استدعاءات fetch الصادرة من الخادم ولا يوجد host أساسي للروابط النسبية.
-const APPS_URL = "https://dash.vexaltech.dev/api/apps";
-
 /**
  * يطابق الـ slug مع تطبيق من ourApps.json.
  * مطابق لمنطق Flutter download_redirect_controller.dart.
@@ -59,53 +53,54 @@ export default async function DownloadRedirectPage({
   const userAgent = headerList.get("user-agent") ?? "";
   const platform = detectPlatform(userAgent);
 
-  // ===== تشخيص مؤقت (HTML خام) =====
-  const debug: string[] = [`slug=${slug}`, `platform=${platform}`, `appsUrl=${APPS_URL}`];
+  // 2. حدّد origin للوصول إلى /api/apps عبر self-proxy.
+  //    على Cloudflare Workers (OpenNext) لا يمكن استدعاء الرابط النسبي "/api/apps"
+  //    ولا يمكن الوصول المباشر إلى dash.vexaltech.dev من الـ Worker أحيانًا.
+  //    لكن الـ self-proxy ("/api/apps" المُعاد توجيهه عبر next.config rewrites) يعمل،
+  //    ويكفي بناء absolute URL من host الطلب نفسه.
+  const host =
+    headerList.get("x-forwarded-host") ||
+    headerList.get("host") ||
+    "";
+  const proto = headerList.get("x-forwarded-proto") || "https";
+  const origin = host ? `${proto}://${host}` : "";
+  const appsUrl = `${origin}/api/apps`;
 
-  // 2. اجلب بيانات التطبيقات (فلترة Alheekmah Library فقط)
+  // 3. اجلب بيانات التطبيقات (فلترة Alheekmah Library فقط)
   let apps: AppInfo[] = [];
   try {
-    const res = await fetch(APPS_URL, { next: { revalidate: 3600 } });
-    debug.push(`fetchStatus=${res.status}`);
-    debug.push(`fetchOk=${res.ok}`);
+    const res = await fetch(appsUrl, { cache: "no-store" });
     if (res.ok) {
       const data = await res.json();
       const allApps: AppInfo[] = data.apps || data;
-      debug.push(`allAppsCount=${allApps.length}`);
       apps = allApps.filter((a: AppInfo) => a.companyName === "Alheekmah Library");
-      debug.push(`filteredCount=${apps.length}`);
-      if (apps.length > 0) debug.push(`appNames=${apps.map((a) => a.appName).join(",")}`);
     }
   } catch (err) {
-    const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
-    debug.push(`FETCH_ERROR=${msg}`);
+    // سجّل الخطأ بدل ابتلاعه صامتًا — يُسهّل كشف الانحدارات في سجلات Workers
+    console.error("[download] fetch apps failed:", err);
   }
 
   // 3. طابق الـ slug
   const app = matchApp(slug, apps);
-  debug.push(`matched=${!!app}`);
 
-  if (app) {
-    const storeUrl = getStoreUrl(platform, {
-      urlAppStore: app.urlAppStore,
-      urlPlayStore: app.urlPlayStore,
-      urlAppGallery: app.urlAppGallery,
-      urlMacAppStore: app.urlMacAppStore,
-    });
-    debug.push(`storeUrl=${storeUrl ?? "null"}`);
-    if (storeUrl) redirect(storeUrl);
-    debug.push("STEP=getStoreUrl returned null");
-  } else {
-    debug.push("STEP=matchApp undefined");
+  // 4. إن لم يُوجد التطبيق → not-found
+  if (!app) {
+    notFound();
   }
 
-  // مؤقتًا: اعرض التشخيص كنص خام بدل notFound()
-  return (
-    <pre style={{ direction: "ltr", textAlign: "left", padding: 16, fontSize: 13 }}>
-      DEBUG /download/{slug}
-      {"\n"}
-      {"\n"}
-      {debug.join("\n")}
-    </pre>
-  );
+  // 5. ابحث عن رابط المتجر المناسب
+  const storeUrl = getStoreUrl(platform, {
+    urlAppStore: app.urlAppStore,
+    urlPlayStore: app.urlPlayStore,
+    urlAppGallery: app.urlAppGallery,
+    urlMacAppStore: app.urlMacAppStore,
+  });
+
+  // 6. إن وُجد رابط → تحويل فوري
+  if (storeUrl) {
+    redirect(storeUrl);
+  }
+
+  // 7. لا يوجد متجر مناسب → not-found (ستعرض واجهة احتياطية)
+  notFound();
 }
