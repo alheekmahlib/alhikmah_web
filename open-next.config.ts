@@ -7,6 +7,13 @@ import r2IncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cac
 //
 // ملاحظة: tagCache وqueue يبقيان "dummy" افتراضياً (لا نستخدم revalidateTag ولا ISR زمني)،
 // وكل صفحاتنا الثابتة لا تحتاج إلا التخزين المؤقت البسيط.
-export default defineCloudflareConfig({
+const config = defineCloudflareConfig({
   incrementalCache: r2IncrementalCache,
 });
+
+// OpenNext يشغّل افتراضياً "npm run build" لبناء Next.js — لكن على منصة Cloudflare
+// أصبح "npm run build" = "opennextjs-cloudflare build" نفسه، فينشأ استدعاء متكرر لا نهائي.
+// نلزمه باستخدام "next build" مباشرةً لكسر الحلقة.
+config.buildCommand = "next build";
+
+export default config;
