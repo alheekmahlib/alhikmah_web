@@ -59,41 +59,53 @@ export default async function DownloadRedirectPage({
   const userAgent = headerList.get("user-agent") ?? "";
   const platform = detectPlatform(userAgent);
 
+  // ===== تشخيص مؤقت (HTML خام) =====
+  const debug: string[] = [`slug=${slug}`, `platform=${platform}`, `appsUrl=${APPS_URL}`];
+
   // 2. اجلب بيانات التطبيقات (فلترة Alheekmah Library فقط)
   let apps: AppInfo[] = [];
   try {
     const res = await fetch(APPS_URL, { next: { revalidate: 3600 } });
+    debug.push(`fetchStatus=${res.status}`);
+    debug.push(`fetchOk=${res.ok}`);
     if (res.ok) {
       const data = await res.json();
       const allApps: AppInfo[] = data.apps || data;
+      debug.push(`allAppsCount=${allApps.length}`);
       apps = allApps.filter((a: AppInfo) => a.companyName === "Alheekmah Library");
+      debug.push(`filteredCount=${apps.length}`);
+      if (apps.length > 0) debug.push(`appNames=${apps.map((a) => a.appName).join(",")}`);
     }
   } catch (err) {
-    // سجّل الخطأ بدل ابتلاعه صامتًا — يُسهّل كشف الانحدارات في سجلات Workers
-    console.error("[download] fetch apps failed:", err);
+    const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+    debug.push(`FETCH_ERROR=${msg}`);
   }
 
   // 3. طابق الـ slug
   const app = matchApp(slug, apps);
+  debug.push(`matched=${!!app}`);
 
-  // 4. إن لم يُوجد التطبيق → not-found
-  if (!app) {
-    notFound();
+  if (app) {
+    const storeUrl = getStoreUrl(platform, {
+      urlAppStore: app.urlAppStore,
+      urlPlayStore: app.urlPlayStore,
+      urlAppGallery: app.urlAppGallery,
+      urlMacAppStore: app.urlMacAppStore,
+    });
+    debug.push(`storeUrl=${storeUrl ?? "null"}`);
+    if (storeUrl) redirect(storeUrl);
+    debug.push("STEP=getStoreUrl returned null");
+  } else {
+    debug.push("STEP=matchApp undefined");
   }
 
-  // 5. ابحث عن رابط المتجر المناسب
-  const storeUrl = getStoreUrl(platform, {
-    urlAppStore: app.urlAppStore,
-    urlPlayStore: app.urlPlayStore,
-    urlAppGallery: app.urlAppGallery,
-    urlMacAppStore: app.urlMacAppStore,
-  });
-
-  // 6. إن وُجد رابط → تحويل فوري
-  if (storeUrl) {
-    redirect(storeUrl);
-  }
-
-  // 7. لا يوجد متجر مناسب → not-found (ستعرض واجهة احتياطية)
-  notFound();
+  // مؤقتًا: اعرض التشخيص كنص خام بدل notFound()
+  return (
+    <pre style={{ direction: "ltr", textAlign: "left", padding: 16, fontSize: 13 }}>
+      DEBUG /download/{slug}
+      {"\n"}
+      {"\n"}
+      {debug.join("\n")}
+    </pre>
+  );
 }
