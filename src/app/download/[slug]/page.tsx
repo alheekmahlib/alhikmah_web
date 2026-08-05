@@ -59,50 +59,26 @@ export default async function DownloadRedirectPage({
   const userAgent = headerList.get("user-agent") ?? "";
   const platform = detectPlatform(userAgent);
 
-  // ===== تشخيص مؤقت: اكشف أين يسقط المنطق داخل الـ Worker =====
-  const debug: Record<string, unknown> = {
-    slug,
-    platform,
-    ua: userAgent.slice(0, 60),
-    appsUrl: APPS_URL,
-  };
-
   // 2. اجلب بيانات التطبيقات (فلترة Alheekmah Library فقط)
   let apps: AppInfo[] = [];
   try {
     const res = await fetch(APPS_URL, { next: { revalidate: 3600 } });
-    debug.fetchStatus = res.status;
-    debug.fetchOk = res.ok;
     if (res.ok) {
       const data = await res.json();
       const allApps: AppInfo[] = data.apps || data;
-      debug.allAppsCount = allApps.length;
-      debug.companyNames = Array.from(
-        new Set(allApps.map((a) => a.companyName).filter(Boolean)),
-      );
       apps = allApps.filter((a: AppInfo) => a.companyName === "Alheekmah Library");
-      debug.filteredCount = apps.length;
     }
   } catch (err) {
     // سجّل الخطأ بدل ابتلاعه صامتًا — يُسهّل كشف الانحدارات في سجلات Workers
     console.error("[download] fetch apps failed:", err);
-    debug.fetchError = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
   }
 
   // 3. طابق الـ slug
   const app = matchApp(slug, apps);
-  debug.matched = !!app;
-  if (app) debug.matchedAppName = app.appName;
 
   // 4. إن لم يُوجد التطبيق → not-found
   if (!app) {
-    debug.step = "matchApp returned undefined";
-    // مؤقتًا: اعرض التشخيص كـ HTML بدل notFound() لرؤية السبب
-    return (
-      <pre style={{ direction: "ltr", textAlign: "left", padding: 16, fontSize: 12 }}>
-        {JSON.stringify(debug, null, 2)}
-      </pre>
-    );
+    notFound();
   }
 
   // 5. ابحث عن رابط المتجر المناسب
@@ -112,7 +88,6 @@ export default async function DownloadRedirectPage({
     urlAppGallery: app.urlAppGallery,
     urlMacAppStore: app.urlMacAppStore,
   });
-  debug.storeUrl = storeUrl;
 
   // 6. إن وُجد رابط → تحويل فوري
   if (storeUrl) {
@@ -120,10 +95,5 @@ export default async function DownloadRedirectPage({
   }
 
   // 7. لا يوجد متجر مناسب → not-found (ستعرض واجهة احتياطية)
-  debug.step = "getStoreUrl returned null";
-  return (
-    <pre style={{ direction: "ltr", textAlign: "left", padding: 16, fontSize: 12 }}>
-      {JSON.stringify(debug, null, 2)}
-    </pre>
-  );
+  notFound();
 }
