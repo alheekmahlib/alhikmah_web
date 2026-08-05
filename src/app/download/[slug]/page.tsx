@@ -97,8 +97,12 @@ export default async function DownloadRedirectPage({
   // 4. إن لم يُوجد التطبيق → not-found
   if (!app) {
     debug.step = "matchApp returned undefined";
-    // مؤقتًا: أرجع JSON بدل notFound() لرؤية السبب
-    return Response.json(debug, { status: 404 });
+    // مؤقتًا: اعرض التشخيص كـ HTML بدل notFound() لرؤية السبب
+    return (
+      <pre style={{ direction: "ltr", textAlign: "left", padding: 16, fontSize: 12 }}>
+        {JSON.stringify(debug, null, 2)}
+      </pre>
+    );
   }
 
   // 5. ابحث عن رابط المتجر المناسب
@@ -117,5 +121,9 @@ export default async function DownloadRedirectPage({
 
   // 7. لا يوجد متجر مناسب → not-found (ستعرض واجهة احتياطية)
   debug.step = "getStoreUrl returned null";
-  return Response.json(debug, { status: 404 });
+  return (
+    <pre style={{ direction: "ltr", textAlign: "left", padding: 16, fontSize: 12 }}>
+      {JSON.stringify(debug, null, 2)}
+    </pre>
+  );
 }
