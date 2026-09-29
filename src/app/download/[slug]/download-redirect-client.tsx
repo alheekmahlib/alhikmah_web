@@ -7,24 +7,8 @@ import {
   detectPlatform,
   getStoreUrl,
 } from "@/lib/platform-detect";
-import type { AppInfo } from "@/lib/types";
 import { fetchApps } from "@/lib/api-cache";
-
-/**
- * مطابقة الـ slug مع تطبيق.
- * في الـ API الجديد، كل تطبيق له حقل `slug` مباشر، فالمطابقة تصبح بسيطة.
- * نُبقي fallback على id للتوافق مع الرابط القديم.
- */
-function matchApp(slug: string, apps: AppInfo[]): AppInfo | undefined {
-  const normalizedSlug = slug.toLowerCase().trim();
-  return apps.find((app) => {
-    // 1) مطابقة مباشرة على slug (الحقل الرسمي)
-    if (app.slug?.toLowerCase().trim() === normalizedSlug) return true;
-    // 2) fallback: id كنص
-    if (String(app.id) === normalizedSlug) return true;
-    return false;
-  });
-}
+import { findAppBySlug, getAlheekmahApps } from "@/lib/apps";
 
 export default function DownloadRedirectClient({ slug }: { slug: string }) {
   const [status, setStatus] = useState<"loading" | "notfound">("loading");
@@ -38,13 +22,9 @@ export default function DownloadRedirectClient({ slug }: { slug: string }) {
         const platform = detectPlatform(userAgent);
 
         // fetchApps يقرأ من "/api/apps" (الـ self-proxy الذي يعمل في المتصفح)
-        const data = await fetchApps<{ apps?: AppInfo[] } | AppInfo[]>();
-        const allApps: AppInfo[] = (data as { apps?: AppInfo[] }).apps || (data as AppInfo[]);
-        const apps = allApps.filter(
-          (a) => a.companyName === "Alheekmah Library",
-        );
+        const apps = getAlheekmahApps(await fetchApps<unknown>());
 
-        const app = matchApp(slug, apps);
+        const app = findAppBySlug(slug, apps);
         if (!app) {
           if (!cancelled) setStatus("notfound");
           return;

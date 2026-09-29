@@ -7,6 +7,7 @@ import { BookOpen, Headphones, Library, Heart, ArrowLeft, ChevronLeft, ChevronRi
 import type { LucideIcon } from "lucide-react";
 import type { AppInfo } from "@/lib/types";
 import { fetchApps } from "@/lib/api-cache";
+import { appDetailPath, getAlheekmahApps } from "@/lib/apps";
 import { getLocalizedField } from "@/lib/platform-detect";
 import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
@@ -121,13 +122,6 @@ export function AyahMarqueeSection() {
 /* ==========================================================================
    قسم تطبيقاتنا — Carousel فاخر
    ========================================================================== */
-const MEDIA_BASE = "https://dash.vexaltech.dev";
-
-function fixMediaUrl(url?: string): string | undefined {
-  if (!url) return undefined;
-  if (url.startsWith("http")) return url;
-  return `${MEDIA_BASE}${url}`;
-}
 
 export function AppsCarouselSection() {
   const t = useTranslations();
@@ -141,13 +135,10 @@ export function AppsCarouselSection() {
     // fetchApps يوفّر كاش (ذاكرة + localStorage) و timeout، فيمنع
     // انفجار الطلبات عند تبديل اللغة ولا يعلّق لو تأخّر الـ upstream.
     let cancelled = false;
-    fetchApps<{ apps: AppInfo[] }>()
+    fetchApps<unknown>()
       .then((data) => {
         if (cancelled) return;
-        const filtered = (data.apps || [])
-          .filter((a) => a.companyName === "Alheekmah Library")
-          .map((a) => ({ ...a, appBanner: fixMediaUrl(a.appBanner), appLogo: fixMediaUrl(a.appLogo) }));
-        setApps(filtered);
+        setApps(getAlheekmahApps(data));
         setLoading(false);
       })
       .catch(() => {
@@ -224,7 +215,7 @@ export function AppsCarouselSection() {
                 </div>
                 <p className="mb-6 text-[0.95rem] leading-relaxed text-ink-soft">{getLocalizedField(apps[index].body, locale, "value")}</p>
                 <div className="flex flex-wrap items-center gap-3">
-                  <Link href="/apps" className="group/btn inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-2.5 text-[0.86rem] font-bold text-paper-fixed shadow-emerald transition-transform hover:-translate-y-0.5">
+                  <Link href={appDetailPath(apps[index])} className="group/btn inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-2.5 text-[0.86rem] font-bold text-paper-fixed shadow-emerald transition-transform hover:-translate-y-0.5">
                     {t("apps_view_details")} <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover/btn:-translate-x-0.5 rtl:rotate-180" />
                   </Link>
                   <div className="flex items-center gap-1.5 rounded-lg border border-rule bg-bg px-3 py-2 text-[0.74rem] font-semibold text-ink-faint">iOS · Android</div>

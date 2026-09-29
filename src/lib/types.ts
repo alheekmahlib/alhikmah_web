@@ -72,7 +72,12 @@ export interface AppInfo {
   /** الوصف متعدد اللغات [{lang, value}] */
   body: LocalizedField[];
   /** نبذة إضافية متعددة اللغات [{lang, value}] */
-  aboutApp?: LocalizedField[];
+  /**
+   * نبذة إضافية عن التطبيق.
+   * الـ API يُرجعها حاليًا نصًا عربيًا خامًا، وقد تصبح مصفوفة لغات
+   * [{lang, value}] لاحقًا — تُدعمان معًا (انظر lib/app-about.ts).
+   */
+  aboutApp?: LocalizedField[] | string;
   appLogo?: string;
   appBanner?: string;
   /** معرض الصور (5 صور في الـ API الجديد) */
@@ -84,6 +89,20 @@ export interface AppInfo {
   urlPlayStore?: string;
   urlAppGallery?: string;
   urlMacAppStore?: string;
+}
+
+/** حزمة Flutter من /api/packages (تُستخدم في صفحة المطورين وصفحة تفاصيل التطبيق). */
+export interface PackageInfo {
+  id: number;
+  packageName: string;
+  companyName?: string;
+  docsUrl?: string;
+  pubUrl?: string;
+  githubUrl?: string;
+  body?: string;
+  packageLogo?: string;
+  packageBanner?: string;
+  tags?: string[];
 }
 
 export interface DevelopersData {

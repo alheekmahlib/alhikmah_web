@@ -36,7 +36,11 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${zain.variable} ${naskh.variable}`}
     >
-      <body className="min-h-screen flex flex-col antialiased">{children}</body>
+      {/* suppressHydrationWarning: إضافات المتصفح (مثل Grammarly) تحقن سمات
+          في <body> قبل تحميل React فتُسبّب تحذير عدم تطابق الـ hydration */}
+      <body className="min-h-screen flex flex-col antialiased" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }

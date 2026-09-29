@@ -8,21 +8,9 @@ import { PageHeader } from "@/components/ui/page-header";
 import { MotionReveal, MotionStagger, MotionStaggerItem } from "@/components/animation/motion-primitives";
 import { cn } from "@/lib/utils";
 import { fetchPackages } from "@/lib/api-cache";
+import type { PackageInfo } from "@/lib/types";
 
 const MEDIA_BASE = "https://dash.vexaltech.dev";
-
-interface Package {
-  id: number;
-  packageName: string;
-  companyName?: string;
-  docsUrl?: string;
-  pubUrl?: string;
-  githubUrl?: string;
-  body?: string;
-  packageLogo?: string;
-  packageBanner?: string;
-  tags?: string[];
-}
 
 function fixUrl(url?: string): string | undefined {
   if (!url) return undefined;
@@ -32,16 +20,16 @@ function fixUrl(url?: string): string | undefined {
 
 export function DevelopersPageContent() {
   const t = useTranslations();
-  const [packages, setPackages] = useState<Package[]>([]);
+  const [packages, setPackages] = useState<PackageInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [selected, setSelected] = useState<Package | null>(null);
+  const [selected, setSelected] = useState<PackageInfo | null>(null);
 
   useEffect(() => {
     // fetchPackages يوفّر كاش (ذاكرة + localStorage) و timeout، فيمنع
     // انفجار الطلبات عند تبديل اللغة ولا يعلّق لو تأخّر الـ upstream.
     let cancelled = false;
-    fetchPackages<{ packages: Package[] }>()
+    fetchPackages<{ packages: PackageInfo[] }>()
       .then((data) => {
         if (cancelled) return;
         const filtered = (data.packages || [])
@@ -123,7 +111,7 @@ function PackageCard({
   onClick,
   t,
 }: {
-  pkg: Package;
+  pkg: PackageInfo;
   onClick: () => void;
   t: (key: string) => string;
 }) {
@@ -185,7 +173,7 @@ function DetailsModal({
   onClose,
   t,
 }: {
-  pkg: Package;
+  pkg: PackageInfo;
   onClose: () => void;
   t: (key: string) => string;
 }) {

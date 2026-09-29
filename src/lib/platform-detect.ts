@@ -83,6 +83,15 @@ export function normalizeSlug(text: string): string {
 }
 
 /**
+ * مطابقة رموز لغات الموقع مع رموز الـ API (تختلف في لغتين).
+ * الفلبينية: الموقع tl والـ API ph — البنغالية: الموقع be والـ API bn.
+ */
+const LANG_ALIASES: Record<string, string> = {
+  tl: "ph",
+  be: "bn",
+};
+
+/**
  * يستخرج النص المناسب للّغة المطلوبة من حقل متعدد اللغات [{lang, name|value}].
  * أولوية: اللغة المطلوبة → العربية → أول لغة متاحة.
  *
@@ -96,8 +105,9 @@ export function getLocalizedField(
   key: "name" | "value" = "value",
 ): string {
   if (!field || !Array.isArray(field) || field.length === 0) return "";
-  // 1) اللغة المطلوبة
-  const match = field.find((f) => f.lang === locale);
+  // 1) اللغة المطلوبة (مع مطابقة رمز الـ API عند اختلافه)
+  const apiLang = LANG_ALIASES[locale] ?? locale;
+  const match = field.find((f) => f.lang === apiLang) ?? field.find((f) => f.lang === locale);
   if (match && (match[key] ?? match.value ?? match.name)) {
     return (match[key] ?? match.value ?? match.name) as string;
   }
