@@ -24,7 +24,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # Node 24 يرفق npm 11 المطابق لإصدار npm الذي وُلّد به package-lock.json؛
+          # npm 10 (المرفق مع Node 22) يرفض التبعيات الاختيارية المتداخلة (@esbuild/*).
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
